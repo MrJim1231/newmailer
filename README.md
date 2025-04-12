@@ -14,3 +14,9 @@ MAIL_USERNAME=berolegnik@gmail.com
 MAIL_PASSWORD=hesw idef ekqa iabr
 MAIL_PORT=587
 MAIL_ENCRYPTION=STARTTLS
+
+berezhnoioleh@gmail.com
+aetm acuc jmer lohx
+
+sitetest544@gmail.com
+hfal jera ydaf zsgy

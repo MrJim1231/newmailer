@@ -3,13 +3,14 @@ import axios from 'axios'
 import { API_URL } from '../api/config' // Используем API_URL
 
 function ConfigForm() {
+  // Инициализация состояния с уже заполненными значениями для почтовых параметров
   const [formData, setFormData] = useState({
-    MAIL_HOST: '',
-    MAIL_USERNAME: '',
-    MAIL_PASSWORD: '',
-    MAIL_PORT: '',
-    MAIL_ENCRYPTION: '',
-    account_name: '', // добавлено поле для имени аккаунта
+    MAIL_HOST: 'smtp.gmail.com', // Значение по умолчанию для MAIL_HOST
+    MAIL_PORT: 587, // Значение по умолчанию для MAIL_PORT
+    MAIL_ENCRYPTION: 'STARTTLS', // Значение по умолчанию для MAIL_ENCRYPTION
+    MAIL_USERNAME: '', // Для заполнения вручную
+    MAIL_PASSWORD: '', // Для заполнения вручную
+    account_name: '', // Добавлено поле для имени аккаунта
   })
 
   const [responseMessage, setResponseMessage] = useState('')
@@ -53,7 +54,15 @@ function ConfigForm() {
 
         <div>
           <label>MAIL_HOST</label>
-          <input type="text" name="MAIL_HOST" value={formData.MAIL_HOST} onChange={handleChange} placeholder="MAIL_HOST" required />
+          <input
+            type="text"
+            name="MAIL_HOST"
+            value={formData.MAIL_HOST}
+            onChange={handleChange}
+            placeholder="MAIL_HOST"
+            readOnly // Поле для MAIL_HOST только для чтения
+            required
+          />
         </div>
 
         <div>
@@ -68,12 +77,28 @@ function ConfigForm() {
 
         <div>
           <label>MAIL_PORT</label>
-          <input type="number" name="MAIL_PORT" value={formData.MAIL_PORT} onChange={handleChange} placeholder="MAIL_PORT" required />
+          <input
+            type="number"
+            name="MAIL_PORT"
+            value={formData.MAIL_PORT}
+            onChange={handleChange}
+            placeholder="MAIL_PORT"
+            readOnly // Поле для MAIL_PORT только для чтения
+            required
+          />
         </div>
 
         <div>
           <label>MAIL_ENCRYPTION</label>
-          <input type="text" name="MAIL_ENCRYPTION" value={formData.MAIL_ENCRYPTION} onChange={handleChange} placeholder="MAIL_ENCRYPTION" required />
+          <input
+            type="text"
+            name="MAIL_ENCRYPTION"
+            value={formData.MAIL_ENCRYPTION}
+            onChange={handleChange}
+            placeholder="MAIL_ENCRYPTION"
+            readOnly // Поле для MAIL_ENCRYPTION только для чтения
+            required
+          />
         </div>
 
         <button type="submit">Сохранить</button>
