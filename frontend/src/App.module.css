@@ -1,0 +1,42 @@
+/* App.module.css */
+
+.appContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+h1 {
+  font-size: 3rem;
+  color: #333;
+  text-align: center;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #666;
+  text-align: center;
+  margin-top: 20px;
+}
+
+hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-top: 2px solid #ccc;
+}
+
+/* Для адаптивности */
+@media (max-width: 768px) {
+  .appContainer {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}

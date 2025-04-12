@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import styles from '../styles/EmailForm.module.css' // Импортируем стили
 
 function EmailForm() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,7 @@ function EmailForm() {
     subject: '',
     message: '',
   })
+
   const [responseMessage, setResponseMessage] = useState('')
 
   const handleChange = (e) => {
@@ -34,13 +36,13 @@ function EmailForm() {
   }
 
   return (
-    <div>
-      <h1>Send an Email</h1>
+    <div className={styles.formContainer}>
+      <h2>Форма отправки письма</h2>
       <form onSubmit={handleSubmit}>
-        <input type="email" name="email" placeholder="Recipient Email" value={formData.email} onChange={handleChange} required />
-        <input type="text" name="subject" placeholder="Subject" value={formData.subject} onChange={handleChange} required />
-        <textarea name="message" placeholder="Message" value={formData.message} onChange={handleChange} required />
-        <button type="submit">Send</button>
+        <input type="email" name="email" placeholder="Email получателя" value={formData.email} onChange={handleChange} required />
+        <input type="text" name="subject" placeholder="Тема письма" value={formData.subject} onChange={handleChange} required />
+        <textarea name="message" placeholder="Сообщение" value={formData.message} onChange={handleChange} required />
+        <button type="submit">Отправить</button>
       </form>
       {responseMessage && <p>{responseMessage}</p>}
     </div>
