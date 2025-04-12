@@ -8,7 +8,7 @@ MAIL_ENCRYPTION VARCHAR(50)
 );
 
 MAIL_HOST=smtp.gmail.com
-MAIL_USERNAME=your-email@gmail.com
-MAIL_PASSWORD=your-app-password
+MAIL_USERNAME=berolegnik@gmail.com
+MAIL_PASSWORD=hesw idef ekqa iabr
 MAIL_PORT=587
 MAIL_ENCRYPTION=STARTTLS
