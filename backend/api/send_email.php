@@ -12,16 +12,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 // Подключение к базе данных
 require_once __DIR__ . '/../includes/db.php';
 
-// Получаем данные из запроса
-$data = json_decode(file_get_contents('php://input'), true);
-
-// Проверка обязательных полей
-if (!isset($data['email'], $data['subject'], $data['message'], $data['account_id'])) {
+// Проверка наличия необходимых данных в запросе
+if (!isset($_POST['email'], $_POST['subject'], $_POST['message'], $_POST['account_id'])) {
     die(json_encode(['message' => 'Missing required fields']));
 }
 
+// Получаем данные из запроса
+$email = $_POST['email'];
+$subject = $_POST['subject'];
+$message = $_POST['message'];
+$account_id = intval($_POST['account_id']); // Защита от SQL-инъекций
+
 // Получение конфигурации почты по ID аккаунта
-$account_id = intval($data['account_id']); // Защита от SQL-инъекций
 $sql = "SELECT * FROM email_config WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $account_id);
@@ -35,16 +37,46 @@ if ($result->num_rows === 0) {
 $config = $result->fetch_assoc();
 $stmt->close();
 
-// Подключаем Composer autoloader
+// Подключаем Composer autoloader для PHPMailer
 require_once __DIR__ . '/../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Настройка PHPMailer
 $mail = new PHPMailer(true);
-$mail->CharSet = 'UTF-8'; // 👈 Обязательно, чтобы поддерживать кириллицу
+$mail->CharSet = 'UTF-8'; // Обязательно для поддержки кириллицы
+
+// Проверка наличия файла и его типов
+$allowedExtensions = ['pdf', 'txt', 'docx'];
+$uploadDirectory = __DIR__ . '/../uploads/';
+
+if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+    // Получаем информацию о файле
+    $fileTmpPath = $_FILES['attachment']['tmp_name'];
+    $fileName = $_FILES['attachment']['name'];
+    $fileSize = $_FILES['attachment']['size'];
+    $fileType = $_FILES['attachment']['type'];
+
+    // Проверка расширения файла
+    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    if (!in_array($fileExtension, $allowedExtensions)) {
+        die(json_encode(['message' => 'Invalid file type. Only PDF, TXT, and DOCX files are allowed.']));
+    }
+
+    // Генерация уникального имени файла для хранения
+    $newFileName = uniqid() . '.' . $fileExtension;
+    $destPath = $uploadDirectory . $newFileName;
+
+    // Перемещаем файл в папку uploads
+    if (!move_uploaded_file($fileTmpPath, $destPath)) {
+        die(json_encode(['message' => 'Error uploading file.']));
+    }
+} else {
+    $destPath = ''; // Если файла нет, оставляем пустую строку
+}
 
 try {
+    // Настройка SMTP
     $mail->isSMTP();
     $mail->Host = $config['MAIL_HOST'];
     $mail->SMTPAuth = true;
@@ -54,10 +86,16 @@ try {
     $mail->Port = $config['MAIL_PORT'];
 
     $mail->setFrom($config['MAIL_USERNAME'], $config['account_name'] ?? 'Mailer');
-    $mail->addAddress($data['email'], 'Recipient');
-    $mail->Subject = $data['subject'];
-    $mail->Body = $data['message'];
+    $mail->addAddress($email, 'Recipient');
+    $mail->Subject = $subject;
+    $mail->Body = $message;
 
+    // Если файл был загружен, прикрепляем его
+    if ($destPath) {
+        $mail->addAttachment($destPath, $fileName);
+    }
+
+    // Отправка письма
     $mail->send();
     echo json_encode(['message' => 'Message has been sent']);
 } catch (Exception $e) {

@@ -8,6 +8,7 @@ function EmailForm() {
     subject: '',
     message: '',
     account_id: '', // Добавляем сюда выбранный аккаунт
+    attachment: null, // Для хранения выбранного файла
   })
 
   const [accounts, setAccounts] = useState([])
@@ -33,15 +34,38 @@ function EmailForm() {
     }))
   }
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0] // Получаем первый выбранный файл
+    setFormData((prevData) => ({
+      ...prevData,
+      attachment: file, // Сохраняем файл в состоянии
+    }))
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    console.log('Submitting form with data:', formData)
+    const formDataToSend = new FormData()
+    formDataToSend.append('email', formData.email)
+    formDataToSend.append('subject', formData.subject)
+    formDataToSend.append('message', formData.message)
+    formDataToSend.append('account_id', formData.account_id)
+
+    // Проверка, что все обязательные поля не пустые
+    if (!formData.email || !formData.subject || !formData.message || !formData.account_id) {
+      alert('Please fill in all required fields.')
+      return
+    }
+
+    // Добавляем файл, если он выбран
+    if (formData.attachment) {
+      formDataToSend.append('attachment', formData.attachment)
+    }
 
     try {
-      const response = await axios.post(`${API_URL}send_email.php`, formData, {
+      const response = await axios.post(`${API_URL}send_email.php`, formDataToSend, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data', // Указываем, что отправляется форма с файлами
         },
       })
 
@@ -69,6 +93,7 @@ function EmailForm() {
         <input type="email" name="email" placeholder="Recipient Email" value={formData.email} onChange={handleChange} required />
         <input type="text" name="subject" placeholder="Subject" value={formData.subject} onChange={handleChange} required />
         <textarea name="message" placeholder="Message" value={formData.message} onChange={handleChange} required />
+        <input type="file" name="attachment" accept=".pdf,.txt,.docx" onChange={handleFileChange} />
         <button type="submit">Send</button>
       </form>
       {responseMessage && <p>{responseMessage}</p>}
