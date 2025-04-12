@@ -6,6 +6,9 @@
   background-color: #333;
   padding: 10px 0;
   z-index: 1000;
+  display: flex;
+  justify-content: space-between; /* Распределяем элементы */
+  align-items: center;
 }
 
 .navbar ul {
@@ -13,8 +16,6 @@
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
 }
 
 .navbar li {
@@ -30,6 +31,20 @@
 
 .navbar a:hover {
   color: #409eff;
+}
+
+/* Лого слева */
+.logoContainer {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.logoText {
+  font-size: 24px;
+  color: white;
+  font-weight: bold;
+  /* text-transform: uppercase; */
 }
 
 /* Чтобы контент не прилипал под navbar */

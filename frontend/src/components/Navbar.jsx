@@ -4,12 +4,15 @@ import styles from '../styles/Navbar.module.css' // Импортируем ст�
 function Navbar() {
   return (
     <nav className={styles.navbar}>
+      <div className={styles.logoContainer}>
+        <span className={styles.logoText}>Mailer</span>
+      </div>
       <ul>
-        <li>
+        {/* <li>
           <Link to="/" className={styles.navLink}>
             Главная
           </Link>
-        </li>
+        </li> */}
         <li>
           <Link to="/email-form" className={styles.navLink}>
             Форма отправки письма
