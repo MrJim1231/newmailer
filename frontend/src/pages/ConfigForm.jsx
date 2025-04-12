@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { API_URL } from '../api/config' // Используем API_URL
 
 function ConfigForm() {
   const [formData, setFormData] = useState({
@@ -23,17 +24,20 @@ function ConfigForm() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    // Логируем данные формы перед отправкой
+    console.log('Submitting config with data:', formData)
+
     try {
-      // Отправка данных через POST-запрос на сервер
-      const response = await axios.post('http://localhost/newmailer/backend/api/save_config.php', formData, {
+      const response = await axios.post(`${API_URL}save_config.php`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       })
 
-      // Отображение сообщения о результате
+      console.log('Response from server:', response.data)
       setResponseMessage(response.data.message)
     } catch (error) {
+      console.error('Error saving config:', error)
       setResponseMessage('Ошибка при сохранении данных')
     }
   }

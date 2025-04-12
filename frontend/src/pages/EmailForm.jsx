@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { API_URL } from '../api/config' // Импортируем API_URL
 
 function EmailForm() {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ function EmailForm() {
     console.log('Submitting form with data:', formData)
 
     try {
-      const response = await axios.post('http://localhost/newmailer/backend/api/send_email.php', formData, {
+      const response = await axios.post(`${API_URL}send_email.php`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
