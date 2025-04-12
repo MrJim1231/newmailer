@@ -65,3 +65,26 @@
   font-size: 16px;
   color: #28a745;
 }
+
+/* Прелоадер */
+.loader {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #409eff;
+  text-align: center;
+  font-weight: bold;
+  animation: loading 2s infinite;
+}
+
+/* Анимация для прелоадера */
+@keyframes loading {
+  0% {
+    content: 'Загрузка...';
+  }
+  50% {
+    content: 'Загрузка..';
+  }
+  100% {
+    content: 'Загрузка...';
+  }
+}

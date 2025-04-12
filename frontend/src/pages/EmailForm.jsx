@@ -14,6 +14,7 @@ function EmailForm() {
 
   const [accounts, setAccounts] = useState([])
   const [responseMessage, setResponseMessage] = useState('')
+  const [loading, setLoading] = useState(false) // Состояние для загрузки
 
   useEffect(() => {
     axios
@@ -60,6 +61,8 @@ function EmailForm() {
       formDataToSend.append('attachment', formData.attachment)
     }
 
+    setLoading(true) // Начинаем загрузку
+
     try {
       const response = await axios.post(`${API_URL}send_email.php`, formDataToSend, {
         headers: {
@@ -71,6 +74,8 @@ function EmailForm() {
     } catch (error) {
       console.error('Ошибка при отправке письма:', error)
       setResponseMessage('Ошибка при отправке письма')
+    } finally {
+      setLoading(false) // Заканчиваем загрузку
     }
   }
 
@@ -99,6 +104,9 @@ function EmailForm() {
           Отправить
         </button>
       </form>
+
+      {/* Прелоадер */}
+      {loading && <div className={styles.loader}>Загрузка...</div>}
 
       {responseMessage && <p className={styles.responseMessage}>{responseMessage}</p>}
     </div>
