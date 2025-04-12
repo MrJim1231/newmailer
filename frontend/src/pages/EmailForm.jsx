@@ -1,14 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { API_URL } from '../api/config' // Импортируем API_URL
+import { API_URL } from '../api/config'
 
 function EmailForm() {
   const [formData, setFormData] = useState({
     email: '',
     subject: '',
     message: '',
+    account_id: '', // Добавляем сюда выбранный аккаунт
   })
+
+  const [accounts, setAccounts] = useState([])
   const [responseMessage, setResponseMessage] = useState('')
+
+  useEffect(() => {
+    // Загружаем список аккаунтов
+    axios
+      .get(`${API_URL}get_accounts.php`)
+      .then((res) => {
+        setAccounts(res.data)
+      })
+      .catch((err) => {
+        console.error('Ошибка при загрузке аккаунтов:', err)
+      })
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -21,7 +36,6 @@ function EmailForm() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Логируем данные формы в консоль перед отправкой
     console.log('Submitting form with data:', formData)
 
     try {
@@ -43,6 +57,15 @@ function EmailForm() {
     <div>
       <h2>Send an Email</h2>
       <form onSubmit={handleSubmit}>
+        <select name="account_id" value={formData.account_id} onChange={handleChange} required>
+          <option value="">Выберите аккаунт</option>
+          {accounts.map((acc) => (
+            <option key={acc.id} value={acc.id}>
+              {acc.account_name} ({acc.MAIL_USERNAME})
+            </option>
+          ))}
+        </select>
+
         <input type="email" name="email" placeholder="Recipient Email" value={formData.email} onChange={handleChange} required />
         <input type="text" name="subject" placeholder="Subject" value={formData.subject} onChange={handleChange} required />
         <textarea name="message" placeholder="Message" value={formData.message} onChange={handleChange} required />

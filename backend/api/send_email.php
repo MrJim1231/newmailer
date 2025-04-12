@@ -12,22 +12,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 // Подключение к базе данных
 require_once __DIR__ . '/../includes/db.php';
 
-// Запрос к базе данных для получения конфигурации почты
-$sql = "SELECT * FROM email_config LIMIT 1";  // Или используйте другой запрос, чтобы извлечь нужную запись
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $config = $result->fetch_assoc();
-} else {
-    die(json_encode(['message' => 'Email configuration not found']));
-}
-
 // Получаем данные из запроса
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['email'], $data['subject'], $data['message'])) {
+// Проверка обязательных полей
+if (!isset($data['email'], $data['subject'], $data['message'], $data['account_id'])) {
     die(json_encode(['message' => 'Missing required fields']));
 }
+
+// Получение конфигурации почты по ID аккаунта
+$account_id = intval($data['account_id']); // Защита от SQL-инъекций
+$sql = "SELECT * FROM email_config WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $account_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    die(json_encode(['message' => 'Email configuration not found']));
+}
+
+$config = $result->fetch_assoc();
+$stmt->close();
 
 // Подключаем Composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -39,14 +45,14 @@ $mail = new PHPMailer(true);
 
 try {
     $mail->isSMTP();
-    $mail->Host = $config['MAIL_HOST'];  // Берем значения из базы данных
+    $mail->Host = $config['MAIL_HOST'];
     $mail->SMTPAuth = true;
     $mail->Username = $config['MAIL_USERNAME'];
     $mail->Password = $config['MAIL_PASSWORD'];
-    $mail->SMTPSecure = $config['MAIL_ENCRYPTION'] == 'STARTTLS' ? PHPMailer::ENCRYPTION_STARTTLS : PHPMailer::ENCRYPTION_SSL;
+    $mail->SMTPSecure = $config['MAIL_ENCRYPTION'] === 'STARTTLS' ? PHPMailer::ENCRYPTION_STARTTLS : PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port = $config['MAIL_PORT'];
 
-    $mail->setFrom($config['MAIL_USERNAME'], 'Mailer');
+    $mail->setFrom($config['MAIL_USERNAME'], $config['account_name'] ?? 'Mailer');
     $mail->addAddress($data['email'], 'Recipient');
     $mail->Subject = $data['subject'];
     $mail->Body = $data['message'];
