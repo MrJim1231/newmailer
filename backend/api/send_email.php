@@ -42,6 +42,7 @@ use PHPMailer\PHPMailer\Exception;
 
 // Настройка PHPMailer
 $mail = new PHPMailer(true);
+$mail->CharSet = 'UTF-8'; // 👈 Обязательно, чтобы поддерживать кириллицу
 
 try {
     $mail->isSMTP();
