@@ -9,6 +9,7 @@ function ConfigForm() {
     MAIL_PASSWORD: '',
     MAIL_PORT: '',
     MAIL_ENCRYPTION: '',
+    account_name: '', // добавлено поле для имени аккаунта
   })
 
   const [responseMessage, setResponseMessage] = useState('')
@@ -24,7 +25,6 @@ function ConfigForm() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Логируем данные формы перед отправкой
     console.log('Submitting config with data:', formData)
 
     try {
@@ -46,6 +46,11 @@ function ConfigForm() {
     <div>
       <h1>Настройки почты</h1>
       <form onSubmit={handleSubmit}>
+        <div>
+          <label>Имя аккаунта</label>
+          <input type="text" name="account_name" value={formData.account_name} onChange={handleChange} placeholder="Имя аккаунта" required />
+        </div>
+
         <div>
           <label>MAIL_HOST</label>
           <input type="text" name="MAIL_HOST" value={formData.MAIL_HOST} onChange={handleChange} placeholder="MAIL_HOST" required />
