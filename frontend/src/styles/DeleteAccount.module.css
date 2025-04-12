@@ -1,0 +1,41 @@
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f4f4f4;
+  border-radius: 8px;
+}
+
+.accountList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.accountItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.deleteButton {
+  background-color: #e63946;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #c1272d;
+}
+
+.message {
+  margin-top: 20px;
+  font-weight: bold;
+}

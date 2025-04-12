@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import EmailForm from './pages/EmailForm'
 import ConfigForm from './pages/ConfigForm'
+import DeleteAccount from './pages/DeleteAccount' // Импортируем компонент страницы удаления аккаунта
 import styles from './App.module.css' // Импортируем стили
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<h2>Добро пожаловать в Мейлер</h2>} />
           <Route path="/email-form" element={<EmailForm />} />
           <Route path="/config-form" element={<ConfigForm />} />
+          <Route path="/delete-account" element={<DeleteAccount />} /> {/* Новый маршрут */}
         </Routes>
       </div>
     </Router>

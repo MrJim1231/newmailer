@@ -20,6 +20,11 @@ function Navbar() {
             Добавить SMTP Конфигурацию
           </Link>
         </li>
+        <li>
+          <Link to="/delete-account" className={styles.navLink}>
+            Удалить аккаунт
+          </Link>
+        </li>
       </ul>
     </nav>
   )
