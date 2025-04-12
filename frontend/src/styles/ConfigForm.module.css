@@ -20,10 +20,18 @@
   gap: 20px;
 }
 
-.select,
-.input,
-.textarea,
-.file {
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  color: #555;
+}
+
+.input {
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -31,17 +39,10 @@
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.input:focus,
-.select:focus,
-.textarea:focus {
+.input:focus {
   border-color: #409eff;
   box-shadow: 0 0 5px rgba(64, 158, 255, 0.3);
   outline: none;
-}
-
-.textarea {
-  min-height: 120px;
-  resize: vertical;
 }
 
 .button {

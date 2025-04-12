@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../api/config'
+import styles from '../styles/EmailForm.module.css'
 
 function EmailForm() {
   const [formData, setFormData] = useState({
     email: '',
     subject: '',
     message: '',
-    account_id: '', // Добавляем сюда выбранный аккаунт
-    attachment: null, // Для хранения выбранного файла
+    account_id: '',
+    attachment: null,
   })
 
   const [accounts, setAccounts] = useState([])
   const [responseMessage, setResponseMessage] = useState('')
 
   useEffect(() => {
-    // Загружаем список аккаунтов
     axios
       .get(`${API_URL}get_accounts.php`)
       .then((res) => {
@@ -35,10 +35,10 @@ function EmailForm() {
   }
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0] // Получаем первый выбранный файл
+    const file = e.target.files[0]
     setFormData((prevData) => ({
       ...prevData,
-      attachment: file, // Сохраняем файл в состоянии
+      attachment: file,
     }))
   }
 
@@ -51,13 +51,11 @@ function EmailForm() {
     formDataToSend.append('message', formData.message)
     formDataToSend.append('account_id', formData.account_id)
 
-    // Проверка, что все обязательные поля не пустые
     if (!formData.email || !formData.subject || !formData.message || !formData.account_id) {
-      alert('Please fill in all required fields.')
+      alert('Заполните все обязательные поля.')
       return
     }
 
-    // Добавляем файл, если он выбран
     if (formData.attachment) {
       formDataToSend.append('attachment', formData.attachment)
     }
@@ -65,23 +63,22 @@ function EmailForm() {
     try {
       const response = await axios.post(`${API_URL}send_email.php`, formDataToSend, {
         headers: {
-          'Content-Type': 'multipart/form-data', // Указываем, что отправляется форма с файлами
+          'Content-Type': 'multipart/form-data',
         },
       })
 
-      console.log('Response from server:', response.data)
       setResponseMessage(response.data.message)
     } catch (error) {
-      console.error('Error sending email:', error)
-      setResponseMessage('Error sending email')
+      console.error('Ошибка при отправке письма:', error)
+      setResponseMessage('Ошибка при отправке письма')
     }
   }
 
   return (
-    <div>
-      <h2>Send an Email</h2>
-      <form onSubmit={handleSubmit}>
-        <select name="account_id" value={formData.account_id} onChange={handleChange} required>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Отправка письма</h2>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <select name="account_id" value={formData.account_id} onChange={handleChange} required className={styles.select}>
           <option value="">Выберите аккаунт</option>
           {accounts.map((acc) => (
             <option key={acc.id} value={acc.id}>
@@ -90,13 +87,20 @@ function EmailForm() {
           ))}
         </select>
 
-        <input type="email" name="email" placeholder="Recipient Email" value={formData.email} onChange={handleChange} required />
-        <input type="text" name="subject" placeholder="Subject" value={formData.subject} onChange={handleChange} required />
-        <textarea name="message" placeholder="Message" value={formData.message} onChange={handleChange} required />
-        <input type="file" name="attachment" accept=".pdf,.txt,.docx" onChange={handleFileChange} />
-        <button type="submit">Send</button>
+        <input type="email" name="email" placeholder="Email получателя" value={formData.email} onChange={handleChange} required className={styles.input} />
+
+        <input type="text" name="subject" placeholder="Тема письма" value={formData.subject} onChange={handleChange} required className={styles.input} />
+
+        <textarea name="message" placeholder="Сообщение" value={formData.message} onChange={handleChange} required className={styles.textarea} />
+
+        <input type="file" name="attachment" accept=".pdf,.txt,.docx" onChange={handleFileChange} className={styles.file} />
+
+        <button type="submit" className={styles.button}>
+          Отправить
+        </button>
       </form>
-      {responseMessage && <p>{responseMessage}</p>}
+
+      {responseMessage && <p className={styles.responseMessage}>{responseMessage}</p>}
     </div>
   )
 }

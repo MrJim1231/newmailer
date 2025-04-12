@@ -1,6 +1,11 @@
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   background-color: #333;
-  padding: 10px;
+  padding: 10px 0;
+  z-index: 1000;
 }
 
 .navbar ul {
@@ -9,6 +14,7 @@
   padding: 0;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 
 .navbar li {
@@ -19,4 +25,14 @@
   text-decoration: none;
   color: #fff;
   font-size: 16px;
+  transition: color 0.3s;
+}
+
+.navbar a:hover {
+  color: #409eff;
+}
+
+/* Чтобы контент не прилипал под navbar */
+.page-content {
+  padding-top: 60px; /* отступ равен высоте navbar + немного запаса */
 }

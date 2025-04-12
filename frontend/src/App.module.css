@@ -1,5 +1,9 @@
 /* App.module.css */
 
+body {
+  background-color: aliceblue;
+}
+
 .appContainer {
   max-width: 1200px;
   margin: 0 auto;

@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Navbar />
       <div className={styles.appContainer}>
-        <h1>Мейлер</h1>
+        {/* <h1>Мейлер</h1> */}
         <Routes>
           <Route path="/" element={<h2>Добро пожаловать в Мейлер</h2>} />
           <Route path="/email-form" element={<EmailForm />} />
