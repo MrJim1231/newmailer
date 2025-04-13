@@ -1,3 +1,4 @@
+import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Faq from './pages/Faq'
@@ -10,28 +11,35 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Home from './pages/Home' // ✅ Добавь компонент Home
+import { AuthProvider } from './contexts/AuthContext' // Импортируем AuthProvider
 import styles from './App.module.css'
 
 function App() {
   return (
     <Router>
-      <div className={styles.appWrapper}>
-        <Navbar />
-        <div className={styles.appContainer}>
-          <Routes>
-            <Route path="/" element={<Home />} /> {/* ✅ Добавлен маршрут для "/" */}
-            <Route path="/email-form" element={<EmailForm />} />
-            <Route path="/config-form" element={<ConfigForm />} />
-            <Route path="/delete-account" element={<DeleteAccount />} />
-            <Route path="/history" element={<EmailHistory />} />
-            <Route path="/faq" element={<Faq />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
+      {' '}
+      {/* Здесь мы оборачиваем все в Router */}
+      <AuthProvider>
+        {' '}
+        {/* И оборачиваем в AuthProvider внутри Router */}
+        <div className={styles.appWrapper}>
+          <Navbar />
+          <div className={styles.appContainer}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/email-form" element={<EmailForm />} />
+              <Route path="/config-form" element={<ConfigForm />} />
+              <Route path="/delete-account" element={<DeleteAccount />} />
+              <Route path="/history" element={<EmailHistory />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </AuthProvider>
     </Router>
   )
 }
