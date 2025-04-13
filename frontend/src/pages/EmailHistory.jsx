@@ -56,12 +56,11 @@ function EmailHistory() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Email получателя</th>
-              <th>Тема</th>
-              <th>Сообщение</th>
               <th>Отправитель</th>
               <th>Email отправителя</th>
+              <th>Тема</th>
+              <th>Сообщение</th>
+              <th>Email получателя</th>
               <th>Дата</th>
               <th>Документ</th>
             </tr>
@@ -69,12 +68,11 @@ function EmailHistory() {
           <tbody>
             {history.map((item) => (
               <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.recipient_email}</td>
-                <td>{item.subject}</td>
-                <td>{item.message}</td>
                 <td>{item.account_name}</td>
                 <td>{item.account_email}</td>
+                <td>{item.subject}</td>
+                <td>{item.message}</td>
+                <td>{item.recipient_email}</td>
                 <td>{item.sent_at}</td>
                 <td>
                   {item.attachment_path ? (
