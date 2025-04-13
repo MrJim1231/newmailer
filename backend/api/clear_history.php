@@ -25,10 +25,13 @@ $result = $conn->query($sql);
 
 if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $filePath = __DIR__ . '/../' . ltrim($row['attachment_path'], '/'); // формируем полный путь к файлу
-
-        if (file_exists($filePath)) {
-            unlink($filePath); // удаляем файл
+        // Разбиваем строку с путями, если там несколько файлов
+        $paths = explode(',', $row['attachment_path']);
+        foreach ($paths as $path) {
+            $filePath = __DIR__ . '/../' . ltrim($path, '/'); // формируем полный путь к файлу
+            if (file_exists($filePath)) {
+                unlink($filePath); // удаляем файл
+            }
         }
     }
 }
