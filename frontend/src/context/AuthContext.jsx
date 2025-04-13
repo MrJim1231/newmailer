@@ -6,9 +6,10 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true) // Важный флаг загрузки
   const navigate = useNavigate()
 
+  // Загрузка данных из localStorage при монтировании компонента
   useEffect(() => {
     const storedUser = localStorage.getItem('user')
     const storedToken = localStorage.getItem('token')
@@ -18,7 +19,8 @@ export const AuthProvider = ({ children }) => {
       setToken(storedToken)
     }
 
-    setLoading(false) // ✅ Обязательно сбрасываем loading
+    // Убираем загрузку после того, как данные загружены
+    setLoading(false)
   }, [])
 
   const login = (userData, userToken) => {
@@ -34,6 +36,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null)
     setToken(null)
     navigate('/login')
+  }
+
+  // Если состояние в процессе загрузки, ничего не рендерим
+  if (loading) {
+    return null // или можно добавить спиннер
   }
 
   return <AuthContext.Provider value={{ user, token, login, logout, loading }}>{children}</AuthContext.Provider>
