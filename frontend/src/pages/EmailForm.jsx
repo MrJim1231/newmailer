@@ -39,7 +39,7 @@ function EmailForm() {
     const files = Array.from(e.target.files)
     setFormData((prevData) => ({
       ...prevData,
-      attachment: [...prevData.attachment, ...files], // добавляем к уже выбранным
+      attachment: [...prevData.attachment, ...files],
     }))
   }
 
@@ -78,6 +78,15 @@ function EmailForm() {
       })
 
       setResponseMessage(response.data.message)
+
+      // ⬇️ очищаем форму после отправки
+      setFormData({
+        email: '',
+        subject: '',
+        message: '',
+        account_id: '',
+        attachment: [],
+      })
     } catch (error) {
       console.error('Ошибка при отправке письма:', error)
       setResponseMessage('Ошибка при отправке письма')
@@ -107,7 +116,6 @@ function EmailForm() {
 
         <input type="file" name="attachment" accept=".pdf,.txt,.docx" multiple onChange={handleFileChange} className={styles.file} />
 
-        {/* список загруженных файлов */}
         {formData.attachment.length > 0 && (
           <ul className={styles.fileList}>
             {formData.attachment.map((file, index) => (
