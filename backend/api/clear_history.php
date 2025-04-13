@@ -19,11 +19,25 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Подключение к базе данных
 require_once __DIR__ . '/../includes/db.php';
 
-// Выполняем очистку таблицы email_history
-$sql = "DELETE FROM email_history";
+// Получаем все attachment_path из email_history
+$sql = "SELECT attachment_path FROM email_history WHERE attachment_path IS NOT NULL AND attachment_path != ''";
+$result = $conn->query($sql);
 
-if ($conn->query($sql) === TRUE) {
-    echo json_encode(['message' => 'Email history cleared successfully']);
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $filePath = __DIR__ . '/../' . ltrim($row['attachment_path'], '/'); // формируем полный путь к файлу
+
+        if (file_exists($filePath)) {
+            unlink($filePath); // удаляем файл
+        }
+    }
+}
+
+// Выполняем очистку таблицы email_history
+$deleteSql = "DELETE FROM email_history";
+
+if ($conn->query($deleteSql) === TRUE) {
+    echo json_encode(['message' => 'Email history and attached files cleared successfully']);
 } else {
     echo json_encode(['message' => 'Error clearing email history: ' . $conn->error]);
 }
