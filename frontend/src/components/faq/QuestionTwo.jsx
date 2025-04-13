@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styles from '../../styles/faq/QuestionTwo.module.css' // Импортируем модуль стилей
+import styles from '../../styles/faq/Question.module.css' // Импортируем модуль стилей
 
 const QuestionTwo = () => {
   // Стейт для отслеживания, раскрыт ли текст
