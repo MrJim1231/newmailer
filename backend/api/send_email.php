@@ -97,6 +97,15 @@ try {
 
     // Отправка письма
     $mail->send();
+
+    // Сохраняем историю отправки в базу
+    $insertSql = "INSERT INTO email_history (email_to, subject, message, attachment_path, account_id)
+                  VALUES (?, ?, ?, ?, ?)";
+    $insertStmt = $conn->prepare($insertSql);
+    $insertStmt->bind_param('ssssi', $email, $subject, $message, $destPath, $account_id);
+    $insertStmt->execute();
+    $insertStmt->close();
+
     echo json_encode(['message' => 'Message has been sent']);
 } catch (Exception $e) {
     echo json_encode(['message' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo]);

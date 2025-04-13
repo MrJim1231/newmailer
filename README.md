@@ -9,6 +9,16 @@ MAIL_ENCRYPTION VARCHAR(50)
 
 ALTER TABLE email_config ADD COLUMN account_name VARCHAR(255);
 
+CREATE TABLE email_history (
+id INT AUTO_INCREMENT PRIMARY KEY,
+email_to VARCHAR(255) NOT NULL,
+subject VARCHAR(255) NOT NULL,
+message TEXT,
+attachment_path VARCHAR(255),
+account_id INT NOT NULL,
+sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 MAIL_HOST=smtp.gmail.com
 MAIL_USERNAME=berolegnik@gmail.com
 MAIL_PASSWORD=hesw idef ekqa iabr

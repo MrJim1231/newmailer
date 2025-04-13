@@ -8,11 +8,11 @@ function Navbar() {
         <span className={styles.logoText}>Mailer</span>
       </div>
       <ul>
-        {/* <li>
+        <li>
           <Link to="/" className={styles.navLink}>
             Главная
           </Link>
-        </li> */}
+        </li>
         <li>
           <Link to="/email-form" className={styles.navLink}>
             Форма отправки письма
