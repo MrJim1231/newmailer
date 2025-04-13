@@ -10,16 +10,20 @@ function Navbar() {
   return (
     <nav className={styles.navbar}>
       <div className={styles.logoContainer}>
+        {/* Логотип может остаться одинаковым */}
         <Link to="/" className={styles.logoText}>
           Mailer
         </Link>
       </div>
       <ul>
-        <li>
-          <Link to="/" className={styles.navLink}>
-            Главная
-          </Link>
-        </li>
+        {/* Главная видна только если пользователь НЕ админ */}
+        {(!user || user.role !== 'admin') && (
+          <li>
+            <Link to="/" className={styles.navLink}>
+              Главная
+            </Link>
+          </li>
+        )}
 
         {user ? (
           <>
@@ -41,13 +45,11 @@ function Navbar() {
                     История писем
                   </Link>
                 </li>
-                {/* Для админа доступна страница Удалить аккаунт */}
                 <li>
                   <Link to="/delete-account" className={styles.navLink}>
                     Удалить аккаунт
                   </Link>
                 </li>
-                {/* Для админа доступна страница FAQ */}
                 <li>
                   <Link to="/faq" className={styles.navLink}>
                     FAQ
@@ -55,7 +57,7 @@ function Navbar() {
                 </li>
               </>
             )}
-            {/* Элементы для всех пользователей */}
+            {/* Элементы для всех авторизованных пользователей */}
             <li>
               <Link to="/profile" className={styles.navLink}>
                 Профиль
