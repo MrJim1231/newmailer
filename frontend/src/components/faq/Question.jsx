@@ -14,7 +14,7 @@ const Question = () => {
     <div className={styles.container}>
       {/* Заголовок с добавлением стрелочки */}
       <h3 className={styles.mainTitle} onClick={toggleContent}>
-        Как сделать так, чтобы письмо шло во «Входящие», а не в СПАМ!
+        Как сделать так, чтобы письмо попадало в «Входящие», а не в СПАМ!
         {/* Стрелочка, которая меняет угол при раскрытии */}
         <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}>&#9660;</span>
       </h3>
