@@ -9,11 +9,6 @@ function Navbar() {
       </div>
       <ul>
         <li>
-          <Link to="/" className={styles.navLink}>
-            Главная
-          </Link>
-        </li>
-        <li>
           <Link to="/email-form" className={styles.navLink}>
             Форма отправки письма
           </Link>
@@ -31,6 +26,11 @@ function Navbar() {
         <li>
           <Link to="/history" className={styles.navLink}>
             История писем
+          </Link>
+        </li>
+        <li>
+          <Link to="/faq" className={styles.navLink}>
+            FAQ
           </Link>
         </li>
       </ul>

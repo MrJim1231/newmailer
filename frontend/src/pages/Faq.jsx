@@ -2,7 +2,7 @@ import React from 'react'
 import Question from '../components/faq/Question'
 import QuestionTwo from '../components/faq/QuestionTwo'
 import QuestionThree from '../components/faq/QuestionThree'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Faq.module.css'
 
 const Home = () => {
   return (
