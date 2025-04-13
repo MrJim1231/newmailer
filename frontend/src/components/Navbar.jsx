@@ -1,22 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useAuth } from '../contexts/AuthContext' // путь поправь под свой
 import styles from '../styles/Navbar.module.css'
 
 function Navbar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    setIsAuthenticated(!!token)
-  }, [])
-
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    setIsAuthenticated(false)
-    navigate('/login')
-  }
+  const { user, logout } = useAuth()
 
   return (
     <nav className={styles.navbar}>
@@ -32,7 +19,7 @@ function Navbar() {
           </Link>
         </li>
 
-        {isAuthenticated ? (
+        {user ? (
           <>
             <li>
               <Link to="/email-form" className={styles.navLink}>
@@ -65,7 +52,7 @@ function Navbar() {
               </Link>
             </li>
             <li>
-              <button onClick={handleLogout} className={styles.navButton}>
+              <button onClick={logout} className={styles.navButton}>
                 Выйти
               </button>
             </li>
