@@ -21,9 +21,17 @@ function Navbar() {
   return (
     <nav className={styles.navbar}>
       <div className={styles.logoContainer}>
-        <span className={styles.logoText}>Mailer</span>
+        <Link to="/" className={styles.logoText}>
+          Mailer
+        </Link>
       </div>
       <ul>
+        <li>
+          <Link to="/" className={styles.navLink}>
+            Главная
+          </Link>
+        </li>
+
         {isAuthenticated ? (
           <>
             <li>
