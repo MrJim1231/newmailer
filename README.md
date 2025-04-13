@@ -26,6 +26,8 @@ email VARCHAR(255) NOT NULL UNIQUE,
 password VARCHAR(255) NOT NULL,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE users
+ADD COLUMN role ENUM('admin', 'user') NOT NULL DEFAULT 'user';
 
 MAIL_HOST=smtp.gmail.com
 MAIL_USERNAME=berolegnik@gmail.com

@@ -29,6 +29,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 $email = $data['email'] ?? '';
 $password = $data['password'] ?? '';
+$role = $data['role'] ?? 'user'; // По умолчанию роль 'user'
 
 // Проверка заполненности полей
 if (empty($email) || empty($password)) {
@@ -52,7 +53,7 @@ if ($result_check->num_rows > 0) {
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 // Добавляем пользователя в базу данных
-$sql = "INSERT INTO users (email, password) VALUES ('$email', '$hashedPassword')";
+$sql = "INSERT INTO users (email, password, role) VALUES ('$email', '$hashedPassword', '$role')";
 
 if ($conn->query($sql) === TRUE) {
     echo json_encode(["success" => true, "message" => "Регистрация прошла успешно"]);

@@ -52,6 +52,7 @@ if ($result->num_rows === 1) {
             "user" => [
                 "id" => $user['id'],
                 "email" => $user['email'],
+                "role" => $user['role'],  // Роль добавлена в ответ
                 "created_at" => $user['created_at']
             ]
         ]);
