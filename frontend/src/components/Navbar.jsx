@@ -28,6 +28,11 @@ function Navbar() {
             Удалить аккаунт
           </Link>
         </li>
+        <li>
+          <Link to="/history" className={styles.navLink}>
+            История писем
+          </Link>
+        </li>
       </ul>
     </nav>
   )

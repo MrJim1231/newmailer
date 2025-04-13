@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import EmailForm from './pages/EmailForm'
 import ConfigForm from './pages/ConfigForm'
 import DeleteAccount from './pages/DeleteAccount' // Импортируем компонент страницы удаления аккаунта
+import EmailHistory from './pages/EmailHistory'
 import styles from './App.module.css' // Импортируем стили
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/email-form" element={<EmailForm />} />
           <Route path="/config-form" element={<ConfigForm />} />
           <Route path="/delete-account" element={<DeleteAccount />} /> {/* Новый маршрут */}
+          <Route path="/history" element={<EmailHistory />} />
         </Routes>
       </div>
     </Router>
