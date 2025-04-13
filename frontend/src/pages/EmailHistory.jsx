@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../api/config'
+import { API_URL_DOC } from '../api/config'
 import styles from '../styles/EmailHistory.module.css'
 
 function EmailHistory() {
@@ -62,6 +63,7 @@ function EmailHistory() {
               <th>Отправитель</th>
               <th>Email отправителя</th>
               <th>Дата</th>
+              <th>Документ</th>
             </tr>
           </thead>
           <tbody>
@@ -74,6 +76,15 @@ function EmailHistory() {
                 <td>{item.account_name}</td>
                 <td>{item.account_email}</td>
                 <td>{item.sent_at}</td>
+                <td>
+                  {item.attachment_path ? (
+                    <a href={`${API_URL_DOC}${item.attachment_path}`} target="_blank" rel="noopener noreferrer">
+                      Просмотреть документ
+                    </a>
+                  ) : (
+                    'Нет документа'
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

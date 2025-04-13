@@ -6,9 +6,9 @@ header("Content-Type: application/json");
 // Подключение к базе данных
 require_once __DIR__ . '/../includes/db.php';
 
-// Получаем историю отправок с данными аккаунта
-$sql = "SELECT h.id, h.recipient_email, h.subject, h.message, h.sent_at,
-               c.account_name, c.MAIL_USERNAME
+// Получаем историю отправок с данными аккаунта и пути к документу
+$sql = "SELECT h.id, h.recipient_email, h.subject, h.message, h.sent_at, 
+               h.attachment_path, c.account_name, c.MAIL_USERNAME
         FROM email_history h
         JOIN email_config c ON h.account_id = c.id
         ORDER BY h.sent_at DESC";
@@ -24,6 +24,7 @@ while ($row = $result->fetch_assoc()) {
         'subject' => $row['subject'],
         'message' => $row['message'],
         'sent_at' => $row['sent_at'],
+        'attachment_path' => $row['attachment_path'],
         'account_name' => $row['account_name'],
         'account_email' => $row['MAIL_USERNAME']
     ];

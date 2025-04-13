@@ -51,6 +51,7 @@ $allowedExtensions = ['pdf', 'txt', 'docx'];
 $uploadDirectory = __DIR__ . '/../uploads/';
 $destPath = '';
 
+// Если файл был загружен
 if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
     $fileTmpPath = $_FILES['attachment']['tmp_name'];
     $fileName = $_FILES['attachment']['name'];
@@ -60,14 +61,22 @@ if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ER
         die(json_encode(['message' => 'Invalid file type. Only PDF, TXT, and DOCX files are allowed.']));
     }
 
+    // Генерация уникального имени для файла
     $newFileName = uniqid() . '.' . $fileExtension;
     $destPath = $uploadDirectory . $newFileName;
 
+    // Перемещение файла в папку uploads
     if (!move_uploaded_file($fileTmpPath, $destPath)) {
         die(json_encode(['message' => 'Error uploading file.']));
     }
+
+    // Сохраняем в базу данных только относительный путь
+    $filePathToSave = 'uploads/' . $newFileName;
+} else {
+    $filePathToSave = ''; // Если файла нет
 }
 
+// Настройка и отправка письма
 try {
     // SMTP настройки
     $mail->isSMTP();
@@ -83,8 +92,8 @@ try {
     $mail->Subject = $subject;
     $mail->Body = $message;
 
-    if ($destPath) {
-        $mail->addAttachment($destPath, $fileName);
+    if ($filePathToSave) {
+        $mail->addAttachment($uploadDirectory . basename($filePathToSave), $fileName);
     }
 
     $mail->send();
@@ -93,7 +102,7 @@ try {
     $insertSql = "INSERT INTO email_history (account_id, recipient_email, subject, message, attachment_path)
                   VALUES (?, ?, ?, ?, ?)";
     $insertStmt = $conn->prepare($insertSql);
-    $insertStmt->bind_param('issss', $account_id, $email, $subject, $message, $destPath);
+    $insertStmt->bind_param('issss', $account_id, $email, $subject, $message, $filePathToSave);
     $insertStmt->execute();
     $insertStmt->close();
 
