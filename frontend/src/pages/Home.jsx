@@ -1,6 +1,7 @@
 import React from 'react'
-import Question from '../components/faq/Question' // Импортируем компонент Question
-import QuestionTwo from '../components/faq/QuestionTwo' // Импортируем компонент QuestionTwo
+import Question from '../components/faq/Question'
+import QuestionTwo from '../components/faq/QuestionTwo'
+import QuestionThree from '../components/faq/QuestionThree'
 import styles from '../styles/Home.module.css'
 
 const Home = () => {
@@ -9,6 +10,7 @@ const Home = () => {
       {/* Вставляем оба компонента Question и QuestionTwo */}
       <Question />
       <QuestionTwo />
+      <QuestionThree />
     </div>
   )
 }
