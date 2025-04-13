@@ -10,31 +10,74 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
-import Home from './pages/Home' // ✅ Добавь компонент Home
-import { AuthProvider } from './context/AuthContext' // Импортируем AuthProvider
+import Home from './pages/Home'
+import { AuthProvider } from './context/AuthContext'
+import PrivateRoute from './components/PrivateRoute' // ✅ импорт защиты
 import styles from './App.module.css'
 
 function App() {
   return (
     <Router>
-      {' '}
-      {/* Здесь мы оборачиваем все в Router */}
       <AuthProvider>
-        {' '}
-        {/* И оборачиваем в AuthProvider внутри Router */}
         <div className={styles.appWrapper}>
           <Navbar />
           <div className={styles.appContainer}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/email-form" element={<EmailForm />} />
-              <Route path="/config-form" element={<ConfigForm />} />
-              <Route path="/delete-account" element={<DeleteAccount />} />
-              <Route path="/history" element={<EmailHistory />} />
-              <Route path="/faq" element={<Faq />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/profile" element={<Profile />} />
+
+              {/* 🔐 Только для авторизованных пользователей */}
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute>
+                    <Profile />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* 🔐 Только для админов */}
+              <Route
+                path="/faq"
+                element={
+                  <PrivateRoute requiredRole="admin">
+                    <Faq />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/email-form"
+                element={
+                  <PrivateRoute requiredRole="admin">
+                    <EmailForm />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/config-form"
+                element={
+                  <PrivateRoute requiredRole="admin">
+                    <ConfigForm />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/delete-account"
+                element={
+                  <PrivateRoute requiredRole="admin">
+                    <DeleteAccount />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/history"
+                element={
+                  <PrivateRoute requiredRole="admin">
+                    <EmailHistory />
+                  </PrivateRoute>
+                }
+              />
             </Routes>
           </div>
           <Footer />
