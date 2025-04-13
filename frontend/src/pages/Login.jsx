@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { useAuth } from '../context/AuthContext' // 👈 импорт хука
-import { useNavigate } from 'react-router-dom' // 👈 для редиректа
+import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
 
-  const { login } = useAuth() // 👈 получаем функцию login из контекста
+  const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleLogin = async (e) => {
@@ -22,14 +22,16 @@ const Login = () => {
 
       const { token, user, message } = response.data
 
-      // 👇 Вместо прямого сохранения в localStorage — используем login() из контекста
       login(user, token)
-
       setMessage(message)
       console.log('Успешный вход:', response.data)
 
-      // Редирект на главную или любую страницу
-      navigate('/')
+      // 🔁 Перенаправляем по роли
+      if (user.role === 'admin') {
+        navigate('/email-form')
+      } else {
+        navigate('/')
+      }
     } catch (error) {
       if (error.response) {
         setMessage(error.response.data.error)
