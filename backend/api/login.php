@@ -1,9 +1,15 @@
 <?php
 // Устанавливаем заголовки CORS
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json; charset=UTF-8");
+
+// Обрабатываем preflight-запрос (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);  // OK статус для OPTIONS
+    exit();
+}
 
 // Подключение к базе данных
 require_once __DIR__ . '/../includes/db.php';
@@ -58,5 +64,6 @@ if ($result->num_rows === 1) {
     echo json_encode(["error" => "Пользователь не найден"]);
 }
 
+// Закрытие соединения с базой данных
 $conn->close();
 ?>
