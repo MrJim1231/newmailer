@@ -1,9 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext' // путь поправь под свой
+import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import styles from '../styles/Navbar.module.css'
 
 function Navbar() {
-  const { user, logout } = useAuth()
+  const { user, logout, loading } = useAuth()
+
+  if (loading) return null // ⏳ Можно вставить спиннер, если хочешь
 
   return (
     <nav className={styles.navbar}>

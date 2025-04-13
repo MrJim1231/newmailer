@@ -6,6 +6,7 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -16,6 +17,8 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser))
       setToken(storedToken)
     }
+
+    setLoading(false) // ✅ Обязательно сбрасываем loading
   }, [])
 
   const login = (userData, userToken) => {
@@ -33,9 +36,7 @@ export const AuthProvider = ({ children }) => {
     navigate('/login')
   }
 
-  return <AuthContext.Provider value={{ user, token, login, logout }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, token, login, logout, loading }}>{children}</AuthContext.Provider>
 }
 
-export const useAuth = () => {
-  return React.useContext(AuthContext)
-}
+export const useAuth = () => React.useContext(AuthContext)

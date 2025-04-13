@@ -11,7 +11,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Home from './pages/Home' // ✅ Добавь компонент Home
-import { AuthProvider } from './contexts/AuthContext' // Импортируем AuthProvider
+import { AuthProvider } from './context/AuthContext' // Импортируем AuthProvider
 import styles from './App.module.css'
 
 function App() {

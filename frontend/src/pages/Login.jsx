@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext' // 👈 импорт хука
+import { useNavigate } from 'react-router-dom' // 👈 для редиректа
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
+
+  const { login } = useAuth() // 👈 получаем функцию login из контекста
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -17,15 +22,14 @@ const Login = () => {
 
       const { token, user, message } = response.data
 
-      // Сохраняем токен и данные пользователя в localStorage
-      localStorage.setItem('token', token)
-      localStorage.setItem('user', JSON.stringify(user))
+      // 👇 Вместо прямого сохранения в localStorage — используем login() из контекста
+      login(user, token)
 
       setMessage(message)
       console.log('Успешный вход:', response.data)
 
-      // Можно сделать редирект
-      // window.location.href = '/dashboard'
+      // Редирект на главную или любую страницу
+      navigate('/')
     } catch (error) {
       if (error.response) {
         setMessage(error.response.data.error)
