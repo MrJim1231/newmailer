@@ -24,12 +24,6 @@ function Navbar() {
         <span className={styles.logoText}>Mailer</span>
       </div>
       <ul>
-        <li>
-          <Link to="/faq" className={styles.navLink}>
-            FAQ
-          </Link>
-        </li>
-
         {isAuthenticated ? (
           <>
             <li>
@@ -55,6 +49,11 @@ function Navbar() {
             <li>
               <Link to="/profile" className={styles.navLink}>
                 Профиль
+              </Link>
+            </li>
+            <li>
+              <Link to="/faq" className={styles.navLink}>
+                FAQ
               </Link>
             </li>
             <li>
