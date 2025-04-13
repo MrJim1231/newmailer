@@ -12,7 +12,8 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Home from './pages/Home'
 import { AuthProvider } from './context/AuthContext'
-import PrivateRoute from './components/PrivateRoute' // ✅ импорт защиты
+import PrivateRoute from './components/PrivateRoute'
+import PublicOnlyRoute from './components/PublicOnlyRoute' // ✅ Импортируем новую защиту
 import styles from './App.module.css'
 
 function App() {
@@ -23,7 +24,16 @@ function App() {
           <Navbar />
           <div className={styles.appContainer}>
             <Routes>
-              <Route path="/" element={<Home />} />
+              {/* 🚫 Админ не может попасть на главную */}
+              <Route
+                path="/"
+                element={
+                  <PublicOnlyRoute>
+                    <Home />
+                  </PublicOnlyRoute>
+                }
+              />
+
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 
