@@ -45,3 +45,17 @@
   font-size: 16px;
   color: #888;
 }
+
+.fileLink {
+  display: inline-block;
+  margin: 4px 0;
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.fileLink:hover {
+  color: #0c51b8;
+  text-decoration: underline;
+}

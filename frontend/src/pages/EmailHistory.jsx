@@ -62,7 +62,7 @@ function EmailHistory() {
               <th>Сообщение</th>
               <th>Email получателя</th>
               <th>Дата</th>
-              <th>Документ</th>
+              <th>Документ(ы)</th>
             </tr>
           </thead>
           <tbody>
@@ -75,13 +75,15 @@ function EmailHistory() {
                 <td>{item.recipient_email}</td>
                 <td>{item.sent_at}</td>
                 <td>
-                  {item.attachment_path ? (
-                    <a href={`${API_URL_DOC}${item.attachment_path}`} target="_blank" rel="noopener noreferrer">
-                      Просмотреть документ
-                    </a>
-                  ) : (
-                    'Нет документа'
-                  )}
+                  {item.attachment_path
+                    ? item.attachment_path.split(',').map((path, index) => (
+                        <div key={index}>
+                          <a href={`${API_URL_DOC}${path}`} target="_blank" rel="noopener noreferrer" className={styles.fileLink}>
+                            📄 Документ {index + 1}
+                          </a>
+                        </div>
+                      ))
+                    : 'Нет документа'}
                 </td>
               </tr>
             ))}
