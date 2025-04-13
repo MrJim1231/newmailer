@@ -23,34 +23,42 @@ function Navbar() {
 
         {user ? (
           <>
-            <li>
-              <Link to="/email-form" className={styles.navLink}>
-                Форма отправки письма
-              </Link>
-            </li>
-            <li>
-              <Link to="/config-form" className={styles.navLink}>
-                Добавить SMTP Конфигурацию
-              </Link>
-            </li>
-            <li>
-              <Link to="/history" className={styles.navLink}>
-                История писем
-              </Link>
-            </li>
-            <li>
-              <Link to="/delete-account" className={styles.navLink}>
-                Удалить аккаунт
-              </Link>
-            </li>
+            {user.role === 'admin' && (
+              <>
+                {/* Только для администратора */}
+                <li>
+                  <Link to="/email-form" className={styles.navLink}>
+                    Форма отправки письма
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/config-form" className={styles.navLink}>
+                    Добавить SMTP Конфигурацию
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/history" className={styles.navLink}>
+                    История писем
+                  </Link>
+                </li>
+                {/* Для админа доступна страница Удалить аккаунт */}
+                <li>
+                  <Link to="/delete-account" className={styles.navLink}>
+                    Удалить аккаунт
+                  </Link>
+                </li>
+                {/* Для админа доступна страница FAQ */}
+                <li>
+                  <Link to="/faq" className={styles.navLink}>
+                    FAQ
+                  </Link>
+                </li>
+              </>
+            )}
+            {/* Элементы для всех пользователей */}
             <li>
               <Link to="/profile" className={styles.navLink}>
                 Профиль
-              </Link>
-            </li>
-            <li>
-              <Link to="/faq" className={styles.navLink}>
-                FAQ
               </Link>
             </li>
             <li>
@@ -61,6 +69,7 @@ function Navbar() {
           </>
         ) : (
           <>
+            {/* Элементы для неавторизованных пользователей */}
             <li>
               <Link to="/login" className={styles.navLink}>
                 Вход
