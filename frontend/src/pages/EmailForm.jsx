@@ -9,12 +9,12 @@ function EmailForm() {
     subject: '',
     message: '',
     account_id: '',
-    attachment: null,
+    attachment: [], // массив файлов
   })
 
   const [accounts, setAccounts] = useState([])
   const [responseMessage, setResponseMessage] = useState('')
-  const [loading, setLoading] = useState(false) // Состояние для загрузки
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     axios
@@ -36,15 +36,27 @@ function EmailForm() {
   }
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0]
+    const files = Array.from(e.target.files)
     setFormData((prevData) => ({
       ...prevData,
-      attachment: file,
+      attachment: [...prevData.attachment, ...files], // добавляем к уже выбранным
+    }))
+  }
+
+  const handleRemoveFile = (index) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      attachment: prevData.attachment.filter((_, i) => i !== index),
     }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if (!formData.email || !formData.subject || !formData.message || !formData.account_id) {
+      alert('Заполните все обязательные поля.')
+      return
+    }
 
     const formDataToSend = new FormData()
     formDataToSend.append('email', formData.email)
@@ -52,16 +64,11 @@ function EmailForm() {
     formDataToSend.append('message', formData.message)
     formDataToSend.append('account_id', formData.account_id)
 
-    if (!formData.email || !formData.subject || !formData.message || !formData.account_id) {
-      alert('Заполните все обязательные поля.')
-      return
-    }
+    formData.attachment.forEach((file) => {
+      formDataToSend.append('attachment[]', file)
+    })
 
-    if (formData.attachment) {
-      formDataToSend.append('attachment', formData.attachment)
-    }
-
-    setLoading(true) // Начинаем загрузку
+    setLoading(true)
 
     try {
       const response = await axios.post(`${API_URL}send_email.php`, formDataToSend, {
@@ -75,7 +82,7 @@ function EmailForm() {
       console.error('Ошибка при отправке письма:', error)
       setResponseMessage('Ошибка при отправке письма')
     } finally {
-      setLoading(false) // Заканчиваем загрузку
+      setLoading(false)
     }
   }
 
@@ -98,14 +105,27 @@ function EmailForm() {
 
         <textarea name="message" placeholder="Сообщение" value={formData.message} onChange={handleChange} required className={styles.textarea} />
 
-        <input type="file" name="attachment" accept=".pdf,.txt,.docx" onChange={handleFileChange} className={styles.file} />
+        <input type="file" name="attachment" accept=".pdf,.txt,.docx" multiple onChange={handleFileChange} className={styles.file} />
+
+        {/* список загруженных файлов */}
+        {formData.attachment.length > 0 && (
+          <ul className={styles.fileList}>
+            {formData.attachment.map((file, index) => (
+              <li key={index} className={styles.fileItem}>
+                {file.name}
+                <button type="button" onClick={() => handleRemoveFile(index)} className={styles.removeButton}>
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
 
         <button type="submit" className={styles.button}>
           Отправить
         </button>
       </form>
 
-      {/* Прелоадер */}
       {loading && <div className={styles.loader}>Загрузка...</div>}
 
       {responseMessage && <p className={styles.responseMessage}>{responseMessage}</p>}
