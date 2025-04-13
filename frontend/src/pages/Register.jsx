@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext' // 👈
+import { useNavigate } from 'react-router-dom' // 👈
 
 const Register = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
+
+  const { login } = useAuth() // 👈 получаем функцию login из контекста
+  const navigate = useNavigate()
 
   const handleRegister = async (e) => {
     e.preventDefault()
@@ -15,9 +20,14 @@ const Register = () => {
         password,
       })
 
-      setMessage(response.data.message)
+      const { token, user, message } = response.data
+
+      // 👇 авторизуем сразу после регистрации
+      login(user, token)
+      setMessage(message)
       console.log('Успешная регистрация:', response.data)
-      // Можно сделать редирект или сразу авторизацию
+
+      navigate('/') // 👈 редирект на главную
     } catch (error) {
       if (error.response) {
         setMessage(error.response.data.error)
