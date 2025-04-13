@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import styles from '../styles/Navbar.module.css' // Импортируем стили
+import styles from '../styles/Navbar.module.css'
 
 function Navbar() {
   return (
@@ -31,6 +31,16 @@ function Navbar() {
         <li>
           <Link to="/faq" className={styles.navLink}>
             FAQ
+          </Link>
+        </li>
+        <li>
+          <Link to="/login" className={styles.navLink}>
+            Вход
+          </Link>
+        </li>
+        <li>
+          <Link to="/register" className={styles.navLink}>
+            Регистрация
           </Link>
         </li>
       </ul>

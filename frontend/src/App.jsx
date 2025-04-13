@@ -5,7 +5,9 @@ import EmailForm from './pages/EmailForm'
 import ConfigForm from './pages/ConfigForm'
 import DeleteAccount from './pages/DeleteAccount'
 import EmailHistory from './pages/EmailHistory'
-import Footer from './components/Footer' // Импорт футера
+import Footer from './components/Footer'
+import Login from './pages/Login' // Подключаем Login
+import Register from './pages/Register' // Подключаем Register
 import styles from './App.module.css'
 
 function App() {
@@ -20,9 +22,11 @@ function App() {
             <Route path="/delete-account" element={<DeleteAccount />} />
             <Route path="/history" element={<EmailHistory />} />
             <Route path="/faq" element={<Faq />} />
+            <Route path="/login" element={<Login />} /> {/* Добавили роут логина */}
+            <Route path="/register" element={<Register />} /> {/* Добавили роут регистрации */}
           </Routes>
         </div>
-        <Footer /> {/* Добавим футер */}
+        <Footer />
       </div>
     </Router>
   )
