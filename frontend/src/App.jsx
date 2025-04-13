@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import Home from './pages/Home'
 import EmailForm from './pages/EmailForm'
 import ConfigForm from './pages/ConfigForm'
 import DeleteAccount from './pages/DeleteAccount' // Импортируем компонент страницы удаления аккаунта
@@ -13,7 +14,7 @@ function App() {
       <div className={styles.appContainer}>
         {/* <h1>Мейлер</h1> */}
         <Routes>
-          <Route path="/" element={<h2>Добро пожаловать в Мейлер</h2>} />
+          <Route path="/" element={<Home />} />
           <Route path="/email-form" element={<EmailForm />} />
           <Route path="/config-form" element={<ConfigForm />} />
           <Route path="/delete-account" element={<DeleteAccount />} /> {/* Новый маршрут */}
