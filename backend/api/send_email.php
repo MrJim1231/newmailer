@@ -44,39 +44,32 @@ use PHPMailer\PHPMailer\Exception;
 
 // Настройка PHPMailer
 $mail = new PHPMailer(true);
-$mail->CharSet = 'UTF-8'; // Обязательно для поддержки кириллицы
+$mail->CharSet = 'UTF-8';
 
 // Проверка наличия файла и его типов
 $allowedExtensions = ['pdf', 'txt', 'docx'];
 $uploadDirectory = __DIR__ . '/../uploads/';
+$destPath = '';
 
 if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
-    // Получаем информацию о файле
     $fileTmpPath = $_FILES['attachment']['tmp_name'];
     $fileName = $_FILES['attachment']['name'];
-    $fileSize = $_FILES['attachment']['size'];
-    $fileType = $_FILES['attachment']['type'];
-
-    // Проверка расширения файла
     $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
     if (!in_array($fileExtension, $allowedExtensions)) {
         die(json_encode(['message' => 'Invalid file type. Only PDF, TXT, and DOCX files are allowed.']));
     }
 
-    // Генерация уникального имени файла для хранения
     $newFileName = uniqid() . '.' . $fileExtension;
     $destPath = $uploadDirectory . $newFileName;
 
-    // Перемещаем файл в папку uploads
     if (!move_uploaded_file($fileTmpPath, $destPath)) {
         die(json_encode(['message' => 'Error uploading file.']));
     }
-} else {
-    $destPath = ''; // Если файла нет, оставляем пустую строку
 }
 
 try {
-    // Настройка SMTP
+    // SMTP настройки
     $mail->isSMTP();
     $mail->Host = $config['MAIL_HOST'];
     $mail->SMTPAuth = true;
@@ -90,19 +83,17 @@ try {
     $mail->Subject = $subject;
     $mail->Body = $message;
 
-    // Если файл был загружен, прикрепляем его
     if ($destPath) {
         $mail->addAttachment($destPath, $fileName);
     }
 
-    // Отправка письма
     $mail->send();
 
     // Сохраняем историю отправки в базу
-    $insertSql = "INSERT INTO email_history (email_to, subject, message, attachment_path, account_id)
+    $insertSql = "INSERT INTO email_history (account_id, recipient_email, subject, message, attachment_path)
                   VALUES (?, ?, ?, ?, ?)";
     $insertStmt = $conn->prepare($insertSql);
-    $insertStmt->bind_param('ssssi', $email, $subject, $message, $destPath, $account_id);
+    $insertStmt->bind_param('issss', $account_id, $email, $subject, $message, $destPath);
     $insertStmt->execute();
     $insertStmt->close();
 

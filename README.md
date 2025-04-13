@@ -19,6 +19,18 @@ account_id INT NOT NULL,
 sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS email_history;
+
+CREATE TABLE email_history (
+id INT AUTO_INCREMENT PRIMARY KEY,
+account_id INT NOT NULL,
+recipient_email VARCHAR(255) NOT NULL,
+subject VARCHAR(255) NOT NULL,
+message TEXT NOT NULL,
+sent_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (account_id) REFERENCES email_config(id) ON DELETE CASCADE
+);
+
 MAIL_HOST=smtp.gmail.com
 MAIL_USERNAME=berolegnik@gmail.com
 MAIL_PASSWORD=hesw idef ekqa iabr
@@ -30,3 +42,14 @@ aetm acuc jmer lohx
 
 sitetest544@gmail.com
 hfal jera ydaf zsgy
+
+CREATE TABLE IF NOT EXISTS email_history (
+id INT AUTO_INCREMENT PRIMARY KEY,
+account_id INT NOT NULL,
+recipient_email VARCHAR(255) NOT NULL,
+subject VARCHAR(255) NOT NULL,
+message TEXT NOT NULL,
+attachment_path VARCHAR(255) DEFAULT NULL,
+sent_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (account_id) REFERENCES email_config(id) ON DELETE CASCADE
+);

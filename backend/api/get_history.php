@@ -1,25 +1,33 @@
 <?php
-// Заголовки CORS
+// Устанавливаем заголовки CORS
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
 // Подключение к базе данных
 require_once __DIR__ . '/../includes/db.php';
 
-// Получаем всю историю писем
-$sql = "SELECT * FROM email_history ORDER BY sent_at DESC";
+// Получаем историю отправок с данными аккаунта
+$sql = "SELECT h.id, h.recipient_email, h.subject, h.message, h.sent_at,
+               c.account_name, c.MAIL_USERNAME
+        FROM email_history h
+        JOIN email_config c ON h.account_id = c.id
+        ORDER BY h.sent_at DESC";
+
 $result = $conn->query($sql);
 
-// Проверка, есть ли записи
-if ($result->num_rows > 0) {
-    $history = [];
+$history = [];
 
-    while ($row = $result->fetch_assoc()) {
-        $history[] = $row;
-    }
-
-    echo json_encode($history);
-} else {
-    echo json_encode(['message' => 'No history found']);
+while ($row = $result->fetch_assoc()) {
+    $history[] = [
+        'id' => $row['id'],
+        'recipient_email' => $row['recipient_email'],
+        'subject' => $row['subject'],
+        'message' => $row['message'],
+        'sent_at' => $row['sent_at'],
+        'account_name' => $row['account_name'],
+        'account_email' => $row['MAIL_USERNAME']
+    ];
 }
+
+echo json_encode($history);
 ?>
