@@ -15,9 +15,17 @@ const Login = () => {
         password,
       })
 
-      setMessage(response.data.message)
+      const { token, user, message } = response.data
+
+      // Сохраняем токен и данные пользователя в localStorage
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
+
+      setMessage(message)
       console.log('Успешный вход:', response.data)
-      // Можно сделать редирект или сохранить данные в localStorage
+
+      // Можно сделать редирект
+      // window.location.href = '/dashboard'
     } catch (error) {
       if (error.response) {
         setMessage(error.response.data.error)
