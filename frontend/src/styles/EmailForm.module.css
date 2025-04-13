@@ -76,6 +76,11 @@
   animation: loading 2s infinite;
 }
 
+.fileList {
+  display: flex;
+  gap: 10px;
+}
+
 /* Анимация для прелоадера */
 @keyframes loading {
   0% {

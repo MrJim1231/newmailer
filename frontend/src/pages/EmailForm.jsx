@@ -116,6 +116,8 @@ function EmailForm() {
 
         <input type="file" name="attachment" accept=".pdf,.txt,.docx" multiple onChange={handleFileChange} className={styles.file} />
 
+        {formData.attachment.length === 0 && <p className={styles.fileFormats}>Вы можете загрузить файлы форматов: .pdf, .txt, .docx</p>}
+
         {formData.attachment.length > 0 && (
           <ul className={styles.fileList}>
             {formData.attachment.map((file, index) => (
