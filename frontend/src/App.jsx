@@ -3,23 +3,26 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import EmailForm from './pages/EmailForm'
 import ConfigForm from './pages/ConfigForm'
-import DeleteAccount from './pages/DeleteAccount' // Импортируем компонент страницы удаления аккаунта
+import DeleteAccount from './pages/DeleteAccount'
 import EmailHistory from './pages/EmailHistory'
-import styles from './App.module.css' // Импортируем стили
+import Footer from './components/Footer' // Импорт футера
+import styles from './App.module.css'
 
 function App() {
   return (
     <Router>
-      <Navbar />
-      <div className={styles.appContainer}>
-        {/* <h1>Мейлер</h1> */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/email-form" element={<EmailForm />} />
-          <Route path="/config-form" element={<ConfigForm />} />
-          <Route path="/delete-account" element={<DeleteAccount />} /> {/* Новый маршрут */}
-          <Route path="/history" element={<EmailHistory />} />
-        </Routes>
+      <div className={styles.appWrapper}>
+        <Navbar />
+        <div className={styles.appContainer}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/email-form" element={<EmailForm />} />
+            <Route path="/config-form" element={<ConfigForm />} />
+            <Route path="/delete-account" element={<DeleteAccount />} />
+            <Route path="/history" element={<EmailHistory />} />
+          </Routes>
+        </div>
+        <Footer /> {/* Добавим футер */}
       </div>
     </Router>
   )
