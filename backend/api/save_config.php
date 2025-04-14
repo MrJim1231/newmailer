@@ -16,6 +16,9 @@ require_once __DIR__ . '/../includes/db.php';
 // Получаем данные из запроса
 $data = json_decode(file_get_contents('php://input'), true);
 
+// Логируем полученные данные для отладки
+error_log("Полученные данные: " . json_encode($data));
+
 // Проверка, что все необходимые данные есть
 if (!isset(
     $data['MAIL_HOST'], 
@@ -23,16 +26,18 @@ if (!isset(
     $data['MAIL_PASSWORD'], 
     $data['MAIL_PORT'], 
     $data['MAIL_ENCRYPTION'],
-    $data['account_name'] // добавлено новое поле
+    $data['account_name'],
+    $data['user_id'] // добавляем проверку для user_id
 )) {
+    error_log("Отсутствуют обязательные поля: " . json_encode($data));  // Логируем ошибку
     echo json_encode(['message' => 'Все поля обязательны'], JSON_UNESCAPED_UNICODE);
     http_response_code(400);
     exit;
 }
 
 // Подготовка SQL-запроса для сохранения данных в таблицу email_config
-$sql = "INSERT INTO email_config (MAIL_HOST, MAIL_USERNAME, MAIL_PASSWORD, MAIL_PORT, MAIL_ENCRYPTION, account_name) 
-        VALUES (?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO email_config (MAIL_HOST, MAIL_USERNAME, MAIL_PASSWORD, MAIL_PORT, MAIL_ENCRYPTION, account_name, user_id) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 // Подготовка и выполнение запроса
 $stmt = $conn->prepare($sql);
@@ -46,18 +51,20 @@ if (!$stmt) {
 
 // Привязываем параметры и выполняем запрос
 $stmt->bind_param(
-    'sssiss', 
+    'sssissi', 
     $data['MAIL_HOST'], 
     $data['MAIL_USERNAME'], 
     $data['MAIL_PASSWORD'], 
     $data['MAIL_PORT'], 
     $data['MAIL_ENCRYPTION'],
-    $data['account_name'] // новое значение
+    $data['account_name'],
+    $data['user_id'] // добавляем user_id
 );
 
 if ($stmt->execute()) {
     echo json_encode(['message' => 'Данные успешно сохранены'], JSON_UNESCAPED_UNICODE);
 } else {
+    error_log("Ошибка при сохранении данных: " . $stmt->error);  // Логируем ошибку
     echo json_encode(['message' => 'Ошибка при сохранении данных'], JSON_UNESCAPED_UNICODE);
     http_response_code(500);
 }

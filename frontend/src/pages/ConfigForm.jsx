@@ -11,6 +11,7 @@ function ConfigForm() {
     MAIL_HOST: 'smtp.gmail.com',
     MAIL_PORT: 587,
     MAIL_ENCRYPTION: 'STARTTLS',
+    user_id: 1, // Добавьте user_id, если оно требуется
   })
 
   const [responseMessage, setResponseMessage] = useState('')
@@ -25,6 +26,9 @@ function ConfigForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Логируем данные, которые отправляются на сервер
+    console.log('Form Data:', formData)
 
     try {
       const response = await axios.post(`${API_URL}save_config.php`, formData, {
@@ -43,9 +47,10 @@ function ConfigForm() {
         MAIL_HOST: 'smtp.gmail.com',
         MAIL_PORT: 587,
         MAIL_ENCRYPTION: 'STARTTLS',
+        user_id: 1, // Ожидаем, что это поле также отправляется
       })
     } catch (error) {
-      console.error('Ошибка при сохранении данных:', error)
+      console.error('Ошибка при сохранении данных:', error.response ? error.response.data : error.message)
       setResponseMessage('Ошибка при сохранении данных')
     }
   }
