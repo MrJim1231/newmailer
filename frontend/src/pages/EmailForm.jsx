@@ -9,7 +9,7 @@ function EmailForm() {
     subject: '',
     message: '',
     account_id: '',
-    attachment: [], // массив файлов
+    attachment: [],
   })
 
   const [accounts, setAccounts] = useState([])
@@ -17,14 +17,21 @@ function EmailForm() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}get_accounts.php`)
-      .then((res) => {
+    const fetchAccounts = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        const res = await axios.get(`${API_URL}get_accounts.php`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         setAccounts(res.data)
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error('Ошибка при загрузке аккаунтов:', err)
-      })
+      }
+    }
+
+    fetchAccounts()
   }, [])
 
   const handleChange = (e) => {
@@ -71,15 +78,16 @@ function EmailForm() {
     setLoading(true)
 
     try {
+      const token = localStorage.getItem('token')
       const response = await axios.post(`${API_URL}send_email.php`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
         },
       })
 
       setResponseMessage(response.data.message)
 
-      // ⬇️ очищаем форму после отправки
       setFormData({
         email: '',
         subject: '',
