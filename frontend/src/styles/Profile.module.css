@@ -1,0 +1,29 @@
+/* Profile.module.css */
+.container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.infoBox {
+  margin-bottom: 20px;
+  text-align: left;
+  line-height: 1.8;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #d32f2f;
+}

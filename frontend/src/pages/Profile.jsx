@@ -1,35 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext' // Импортируем useAuth из контекста
+import styles from '../styles/Profile.module.css'
 
 const Profile = () => {
+  const { user, logout, loading } = useAuth() // Используем хук useAuth
   const navigate = useNavigate()
-  const [user, setUser] = useState(null)
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user')
-    const token = localStorage.getItem('token')
+    if (loading) return // Ждем, пока загрузится состояние
 
-    if (!token || !storedUser) {
-      navigate('/login') // Перенаправление, если нет токена
-    } else {
-      setUser(JSON.parse(storedUser))
+    if (!user) {
+      navigate('/auth/login') // Перенаправляем, если пользователь не авторизован
     }
-  }, [navigate])
+  }, [user, loading, navigate])
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    navigate('/login')
+    logout() // Вызываем метод logout из контекста
+  }
+
+  if (loading) {
+    return <div className={styles.container}>Загрузка...</div> // Пока идет загрузка
   }
 
   if (!user) {
-    return <div style={styles.container}>Загрузка...</div>
+    return <div className={styles.container}>Пользователь не найден</div> // В случае ошибки
   }
 
   return (
-    <div style={styles.container}>
+    <div className={styles.container}>
       <h2>Профиль</h2>
-      <div style={styles.infoBox}>
+      <div className={styles.infoBox}>
         <p>
           <strong>Email:</strong> {user.email}
         </p>
@@ -43,36 +44,11 @@ const Profile = () => {
           <strong>Создан:</strong> {user.created_at}
         </p>
       </div>
-      <button onClick={handleLogout} style={styles.button}>
+      <button onClick={handleLogout} className={styles.button}>
         Выйти
       </button>
     </div>
   )
-}
-
-const styles = {
-  container: {
-    maxWidth: '500px',
-    margin: '50px auto',
-    padding: '30px',
-    border: '1px solid #ddd',
-    borderRadius: '10px',
-    textAlign: 'center',
-  },
-  infoBox: {
-    marginBottom: '20px',
-    textAlign: 'left',
-    lineHeight: '1.8',
-  },
-  button: {
-    padding: '10px 20px',
-    fontSize: '16px',
-    backgroundColor: '#f44336',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
 }
 
 export default Profile
