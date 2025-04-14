@@ -17,7 +17,7 @@ const Register = () => {
       })
 
       setMessage(response.data.message)
-      console.log('Успешная регистрация:', response.data)
+      // console.log('Успешная регистрация:', response.data)
       // Можно сделать редирект или сразу авторизацию
     } catch (error) {
       if (error.response) {

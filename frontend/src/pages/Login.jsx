@@ -31,7 +31,7 @@ const Login = () => {
 
       login(user, token)
       setMessage(message)
-      console.log('Успешный вход:', response.data)
+      // console.log('Успешный вход:', response.data)
       navigate('/')
     } catch (error) {
       if (error.response) {
