@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { API_URL } from '../api/config'
+import { API_URL } from '../api/config' // Путь к вашему API
+import jwt_decode from 'jwt-decode' // Используйте правильный импорт
 import styles from '../styles/ConfigForm.module.css'
 
 function ConfigForm() {
@@ -11,11 +12,22 @@ function ConfigForm() {
     MAIL_HOST: 'smtp.gmail.com',
     MAIL_PORT: 587,
     MAIL_ENCRYPTION: 'STARTTLS',
-    user_id: 1, // Добавьте user_id, если оно требуется
+    user_id: 1, // Это значение должно быть извлечено из токена
   })
 
   const [responseMessage, setResponseMessage] = useState('')
 
+  // Функция для получения user_id из токена
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      const decoded = jwt_decode(token)
+      return decoded.sub // user_id
+    }
+    return null
+  }
+
+  // Обновление данных формы
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prevData) => ({
@@ -24,16 +36,27 @@ function ConfigForm() {
     }))
   }
 
+  // Отправка данных на сервер
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Логируем данные, которые отправляются на сервер
+    // Логирование данных формы
     console.log('Form Data:', formData)
+
+    // Добавляем user_id из токена
+    const userId = getUserIdFromToken()
+    if (userId) {
+      formData.user_id = userId
+    } else {
+      setResponseMessage('Ошибка: токен не найден')
+      return
+    }
 
     try {
       const response = await axios.post(`${API_URL}save_config.php`, formData, {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Передаем токен
         },
       })
 
@@ -47,7 +70,7 @@ function ConfigForm() {
         MAIL_HOST: 'smtp.gmail.com',
         MAIL_PORT: 587,
         MAIL_ENCRYPTION: 'STARTTLS',
-        user_id: 1, // Ожидаем, что это поле также отправляется
+        user_id: 1,
       })
     } catch (error) {
       console.error('Ошибка при сохранении данных:', error.response ? error.response.data : error.message)
@@ -71,19 +94,7 @@ function ConfigForm() {
 
         <div className={styles.formGroup}>
           <label className={styles.label}>MAIL_PASSWORD</label>
-          <div className={styles.passwordWrapper}>
-            <input type="password" name="MAIL_PASSWORD" value={formData.MAIL_PASSWORD} onChange={handleChange} placeholder="MAIL_PASSWORD" required className={`${styles.input} ${styles.wideInput}`} />
-            <button
-              type="button"
-              className={styles.togglePassword}
-              onClick={() => {
-                const input = document.querySelector('[name="MAIL_PASSWORD"]')
-                input.type = input.type === 'password' ? 'text' : 'password'
-              }}
-            >
-              Показать
-            </button>
-          </div>
+          <input type="password" name="MAIL_PASSWORD" value={formData.MAIL_PASSWORD} onChange={handleChange} placeholder="MAIL_PASSWORD" required className={styles.input} />
         </div>
 
         <div className={styles.formGroup}>
