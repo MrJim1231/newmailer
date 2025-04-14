@@ -13,6 +13,7 @@ function EmailHistory() {
     fetchHistory()
   }, [])
 
+  // Получение истории отправленных писем
   const fetchHistory = () => {
     const token = localStorage.getItem('token') // Получаем токен из localStorage
 
@@ -34,6 +35,7 @@ function EmailHistory() {
       })
   }
 
+  // Очистка истории
   const clearHistory = () => {
     if (!window.confirm('Вы уверены, что хотите очистить всю историю?')) return
 
@@ -51,7 +53,7 @@ function EmailHistory() {
       )
       .then((res) => {
         alert(res.data.message)
-        fetchHistory()
+        setHistory([]) // Сразу очищаем историю на фронтенде
       })
       .catch((err) => {
         console.error('Ошибка при очистке:', err)
@@ -59,6 +61,7 @@ function EmailHistory() {
       })
   }
 
+  // Форматирование даты
   const formatDate = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleString() // Возвращает строку с датой и временем
