@@ -53,7 +53,7 @@ $sql = "SELECT h.id, h.recipient_email, h.subject, h.message, h.sent_at,
                h.attachment_path, c.account_name, c.MAIL_USERNAME
         FROM email_history h
         JOIN email_config c ON h.account_id = c.id
-        WHERE c.user_id = ?  // добавляем фильтрацию по user_id
+        WHERE c.user_id = ? 
         ORDER BY h.sent_at DESC";
 
 $stmt = $conn->prepare($sql);
@@ -78,21 +78,26 @@ if (!$result) {
 
 $history = [];
 
-while ($row = $result->fetch_assoc()) {
-    $history[] = [
-        'id' => $row['id'],
-        'recipient_email' => $row['recipient_email'],
-        'subject' => $row['subject'],
-        'message' => $row['message'],
-        'sent_at' => $row['sent_at'],
-        'attachment_path' => $row['attachment_path'],
-        'account_name' => $row['account_name'],
-        'account_email' => $row['MAIL_USERNAME']
-    ];
+// Проверяем, есть ли записи в истории
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $history[] = [
+            'id' => $row['id'],
+            'recipient_email' => $row['recipient_email'],
+            'subject' => $row['subject'],
+            'message' => $row['message'],
+            'sent_at' => $row['sent_at'],
+            'attachment_path' => $row['attachment_path'],
+            'account_name' => $row['account_name'],
+            'account_email' => $row['MAIL_USERNAME']
+        ];
+    }
+    echo json_encode($history);
+} else {
+    echo json_encode(['message' => 'No email history found']);
 }
-
-echo json_encode($history);
 
 $stmt->close();
 $conn->close();
+
 ?>
