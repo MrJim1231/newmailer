@@ -12,8 +12,13 @@ function DeleteAccount() {
   }, [])
 
   const fetchAccounts = () => {
+    const token = localStorage.getItem('token')
     axios
-      .get(`${API_URL}get_accounts.php`)
+      .get(`${API_URL}get_accounts.php`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setAccounts(res.data)
       })
@@ -24,6 +29,7 @@ function DeleteAccount() {
 
   const handleDelete = (id) => {
     if (window.confirm('Вы уверены, что хотите удалить этот аккаунт?')) {
+      const token = localStorage.getItem('token')
       axios
         .post(
           `${API_URL}delete_account.php`,
@@ -31,12 +37,13 @@ function DeleteAccount() {
           {
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
             },
           }
         )
         .then((res) => {
           setMessage(res.data.message)
-          fetchAccounts() // обновляем список после удаления
+          fetchAccounts()
         })
         .catch((err) => {
           console.error('Ошибка при удалении:', err)
