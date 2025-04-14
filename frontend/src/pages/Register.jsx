@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import styles from '../styles/AuthPage.module.css'
 
 const Register = () => {
   const [email, setEmail] = useState('')
@@ -28,54 +29,19 @@ const Register = () => {
   }
 
   return (
-    <div style={styles.container}>
-      <h2>Регистрация</h2>
-      <form onSubmit={handleRegister} style={styles.form}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required style={styles.input} />
-        <input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} required style={styles.input} />
-        <button type="submit" style={styles.button}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Регистрация</h2>
+      <form onSubmit={handleRegister} className={styles.form}>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required className={styles.input} />
+        <input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} required className={styles.input} />
+        <button type="submit" className={styles.button}>
           Зарегистрироваться
         </button>
       </form>
 
-      {message && <p style={styles.message}>{message}</p>}
+      {message && <p className={styles.message}>{message}</p>}
     </div>
   )
-}
-
-const styles = {
-  container: {
-    maxWidth: '400px',
-    margin: '50px auto',
-    padding: '30px',
-    border: '1px solid #ddd',
-    borderRadius: '10px',
-    textAlign: 'center',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-  },
-  input: {
-    padding: '12px',
-    fontSize: '16px',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-  },
-  button: {
-    padding: '12px',
-    fontSize: '16px',
-    backgroundColor: '#2196F3',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-  message: {
-    marginTop: '20px',
-    color: '#333',
-  },
 }
 
 export default Register

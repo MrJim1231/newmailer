@@ -12,6 +12,7 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Home from './pages/Home' // ✅ Добавь компонент Home
 import { AuthProvider } from './context/AuthContext' // Импортируем AuthProvider
+import AuthPage from './pages/AuthPage' // 👈 компонент, который внутри переключает формы
 import styles from './App.module.css'
 
 function App() {
@@ -32,8 +33,8 @@ function App() {
               <Route path="/delete-account" element={<DeleteAccount />} />
               <Route path="/history" element={<EmailHistory />} />
               <Route path="/faq" element={<Faq />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/auth/login" element={<AuthPage mode="login" />} />
+              <Route path="/auth/register" element={<AuthPage mode="register" />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </div>

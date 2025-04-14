@@ -1,0 +1,85 @@
+.authContainer {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #fff;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.button {
+  padding: 12px;
+  font-size: 16px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #1976d2;
+}
+
+.message {
+  margin-top: 20px;
+  color: #d33;
+  font-size: 14px;
+}
+
+/* Новый класс для блока переключения между формами */
+.switchLink {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.switchLink p {
+  margin: 0;
+}
+
+.switchLink a {
+  color: #2196f3;
+  text-decoration: none;
+}
+
+.switchLink a:hover {
+  text-decoration: underline;
+}
+
+/* Дополнительный класс для кнопки переключения */
+.toggleButton {
+  padding: 12px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.toggleButton:hover {
+  background-color: #45a049;
+}

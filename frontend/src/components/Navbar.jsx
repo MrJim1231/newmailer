@@ -5,7 +5,7 @@ import styles from '../styles/Navbar.module.css'
 function Navbar() {
   const { user, logout, loading } = useAuth()
 
-  if (loading) return null // ⏳ Можно вставить спиннер, если хочешь
+  if (loading) return null
 
   return (
     <nav className={styles.navbar}>
@@ -60,18 +60,11 @@ function Navbar() {
             </li>
           </>
         ) : (
-          <>
-            <li>
-              <Link to="/login" className={styles.navLink}>
-                Вход
-              </Link>
-            </li>
-            <li>
-              <Link to="/register" className={styles.navLink}>
-                Регистрация
-              </Link>
-            </li>
-          </>
+          <li>
+            <Link to="/auth/login" className={styles.navLink}>
+              Личный кабинет
+            </Link>
+          </li>
         )}
       </ul>
     </nav>
