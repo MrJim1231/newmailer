@@ -6,9 +6,12 @@ const Register = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleRegister = async (e) => {
     e.preventDefault()
+    setMessage(null)
+    setError(null)
 
     try {
       const response = await axios.post('http://localhost/newmailer/backend/api/register.php', {
@@ -16,15 +19,15 @@ const Register = () => {
         password,
       })
 
-      setMessage(response.data.message)
-      // console.log('Успешная регистрация:', response.data)
-      // Можно сделать редирект или сразу авторизацию
-    } catch (error) {
-      if (error.response) {
-        setMessage(error.response.data.error)
+      const data = response.data
+
+      if (data.success) {
+        setMessage(data.message)
       } else {
-        setMessage('Ошибка соединения с сервером')
+        setError(data.error || 'Ошибка при регистрации')
       }
+    } catch (err) {
+      setError('Ошибка соединения с сервером')
     }
   }
 
@@ -39,7 +42,16 @@ const Register = () => {
         </button>
       </form>
 
-      {message && <p className={styles.message}>{message}</p>}
+      {message && (
+        <p className={styles.message} style={{ color: 'green' }}>
+          {message}
+        </p>
+      )}
+      {error && (
+        <p className={styles.message} style={{ color: 'red' }}>
+          {error}
+        </p>
+      )}
     </div>
   )
 }
