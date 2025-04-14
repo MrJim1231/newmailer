@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import styles from '../styles/Navbar.module.css'
 
@@ -10,42 +10,42 @@ function Navbar() {
   return (
     <nav className={styles.navbar}>
       <div className={styles.logoContainer}>
-        <Link to="/" className={styles.logoText}>
+        <NavLink to="/" className={styles.logoText}>
           Mailer
-        </Link>
+        </NavLink>
       </div>
       <ul>
         {user ? (
           <>
             <li>
-              <Link to="/email-form" className={styles.navLink}>
+              <NavLink to="/email-form" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
                 Форма отправки письма
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/config-form" className={styles.navLink}>
+              <NavLink to="/config-form" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
                 Добавить SMTP Конфигурацию
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/history" className={styles.navLink}>
+              <NavLink to="/history" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
                 История писем
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/delete-account" className={styles.navLink}>
+              <NavLink to="/delete-account" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
                 Удалить аккаунт
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/profile" className={styles.navLink}>
+              <NavLink to="/profile" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
                 Профиль
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/faq" className={styles.navLink}>
+              <NavLink to="/faq" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
                 FAQ
-              </Link>
+              </NavLink>
             </li>
             <li>
               <button onClick={logout} className={styles.navButton}>
@@ -55,9 +55,9 @@ function Navbar() {
           </>
         ) : (
           <li>
-            <Link to="/auth/login" className={styles.navLink}>
+            <NavLink to="/auth/login" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
               Личный кабинет
-            </Link>
+            </NavLink>
           </li>
         )}
       </ul>

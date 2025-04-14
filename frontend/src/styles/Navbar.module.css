@@ -7,7 +7,7 @@
   padding: 10px 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between; /* Распределяем элементы */
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -19,18 +19,28 @@
 }
 
 .navbar li {
-  margin: 0 10px;
+  margin: 0 15px; /* Добавлены отступы для элементов */
 }
 
 .navbar a {
   text-decoration: none;
   color: #fff;
   font-size: 16px;
-  transition: color 0.3s;
+  padding: 8px 16px; /* Добавлены отступы для ссылок */
+  border-radius: 4px; /* Добавлены скругленные углы */
+  transition: color 0.3s, background-color 0.3s; /* Плавные переходы */
 }
 
 .navbar a:hover {
   color: #409eff;
+  background-color: rgba(255, 255, 255, 0.1); /* Фон при ховере */
+}
+
+/* Стили для активной ссылки */
+.navbar .activeLink {
+  color: #409eff; /* Цвет активной ссылки */
+  font-weight: bold;
+  background-color: rgba(64, 158, 255, 0.2); /* Фон активной ссылки */
 }
 
 /* Лого слева */
@@ -44,7 +54,6 @@
   font-size: 24px;
   color: white;
   font-weight: bold;
-  /* text-transform: uppercase; */
 }
 
 /* Чтобы контент не прилипал под navbar */
@@ -61,6 +70,7 @@
   font: inherit;
   text-decoration: underline;
 }
+
 .navButton:hover {
   color: #0056b3;
 }
