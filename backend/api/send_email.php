@@ -2,7 +2,7 @@
 // Устанавливаем заголовки CORS
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Добавляем Authorization
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -31,7 +31,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    die(json_encode(['message' => 'Email configuration not found']));
+    die(json_encode(['message' => 'Email configuration not found'])); // Не найдена конфигурация для указанного аккаунта
 }
 
 $config = $result->fetch_assoc();
@@ -59,14 +59,14 @@ if (isset($_FILES['attachment']) && !empty($_FILES['attachment']['name'][0])) {
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
             if (!in_array($fileExtension, $allowedExtensions)) {
-                die(json_encode(['message' => 'Invalid file type. Only PDF, TXT, and DOCX files are allowed.']));
+                die(json_encode(['message' => 'Invalid file type. Only PDF, TXT, and DOCX files are allowed.'])); // Неверный тип файла
             }
 
             $newFileName = uniqid() . '.' . $fileExtension;
             $destPath = $uploadDirectory . $newFileName;
 
             if (!move_uploaded_file($tmpName, $destPath)) {
-                die(json_encode(['message' => 'Error uploading file: ' . $fileName]));
+                die(json_encode(['message' => 'Error uploading file: ' . $fileName])); // Ошибка при загрузке файла
             }
 
             $filePathsToSave[] = 'uploads/' . $newFileName;
@@ -106,8 +106,8 @@ try {
     $insertStmt->execute();
     $insertStmt->close();
 
-    echo json_encode(['message' => 'Message has been sent']);
+    echo json_encode(['message' => 'Message has been sent']); // Сообщение успешно отправлено
 } catch (Exception $e) {
-    echo json_encode(['message' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo]);
+    echo json_encode(['message' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo]); // Ошибка при отправке письма
 }
 ?>

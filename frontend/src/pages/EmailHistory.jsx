@@ -5,7 +5,7 @@ import { API_URL_DOC } from '../api/config'
 import styles from '../styles/EmailHistory.module.css'
 
 function EmailHistory() {
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState([]) // Инициализируем как массив
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState('')
 
@@ -14,10 +14,17 @@ function EmailHistory() {
   }, [])
 
   const fetchHistory = () => {
+    const token = localStorage.getItem('token') // Получаем токен из localStorage
+
     axios
-      .get(`${API_URL}get_history.php`)
+      .get(`${API_URL}get_history.php`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Отправляем токен в заголовке
+        },
+      })
       .then((res) => {
-        setHistory(res.data)
+        // Убедимся, что полученные данные — это массив
+        setHistory(Array.isArray(res.data) ? res.data : [])
         setLoading(false)
       })
       .catch((err) => {
@@ -29,8 +36,18 @@ function EmailHistory() {
   const clearHistory = () => {
     if (!window.confirm('Вы уверены, что хотите очистить всю историю?')) return
 
+    const token = localStorage.getItem('token') // Получаем токен для очистки истории
+
     axios
-      .post(`${API_URL}clear_history.php`)
+      .post(
+        `${API_URL}clear_history.php`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Отправляем токен в заголовке
+          },
+        }
+      )
       .then((res) => {
         alert(res.data.message)
         fetchHistory()

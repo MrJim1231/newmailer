@@ -1,19 +1,65 @@
 <?php
-// Устанавливаем заголовки CORS
+// Заголовки CORS
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
+header("Access-Control-Allow-Methods: GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json; charset=UTF-8");
 
-// Подключение к базе данных
+// Preflight-запрос (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Подключение к базе данных и автозагрузчик
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-// Получаем историю отправок с данными аккаунта и пути к документу
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+// JWT настройки
+$jwt_secret = "MY_SECRET_KEY"; // тот же секрет, что и в других скриптах
+$jwt_issuer = "http://localhost:5173";
+
+// Проверка авторизации через токен
+$headers = apache_request_headers();
+if (isset($headers['Authorization'])) {
+    $authHeader = $headers['Authorization'];
+    list($type, $token) = explode(" ", $authHeader);
+
+    if ($type == "Bearer" && $token) {
+        try {
+            $decoded = JWT::decode($token, new Key($jwt_secret, 'HS256'));
+            $user_id = $decoded->sub; // получаем user_id из токена
+        } catch (Exception $e) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Неверный токен']);
+            exit();
+        }
+    } else {
+        http_response_code(401);
+        echo json_encode(['error' => 'Неверный формат токена']);
+        exit();
+    }
+} else {
+    http_response_code(401);
+    echo json_encode(['error' => 'Токен не предоставлен']);
+    exit();
+}
+
+// Запрос истории отправленных писем для текущего пользователя
 $sql = "SELECT h.id, h.recipient_email, h.subject, h.message, h.sent_at, 
                h.attachment_path, c.account_name, c.MAIL_USERNAME
         FROM email_history h
         JOIN email_config c ON h.account_id = c.id
+        WHERE c.user_id = ?  // добавляем фильтрацию по user_id
         ORDER BY h.sent_at DESC";
 
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id); // Привязываем user_id
+$stmt->execute();
+$result = $stmt->get_result();
 
 $history = [];
 
@@ -31,4 +77,7 @@ while ($row = $result->fetch_assoc()) {
 }
 
 echo json_encode($history);
+
+$stmt->close();
+$conn->close();
 ?>

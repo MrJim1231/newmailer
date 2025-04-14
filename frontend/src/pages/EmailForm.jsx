@@ -16,6 +16,7 @@ function EmailForm() {
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
 
+  // Fetch accounts from the backend
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
@@ -88,6 +89,7 @@ function EmailForm() {
 
       setResponseMessage(response.data.message)
 
+      // Clear form after successful submission
       setFormData({
         email: '',
         subject: '',
@@ -97,7 +99,10 @@ function EmailForm() {
       })
     } catch (error) {
       console.error('Ошибка при отправке письма:', error)
-      setResponseMessage('Ошибка при отправке письма')
+
+      // Display error response message if available
+      const errorMessage = error.response?.data?.message || 'Ошибка при отправке письма'
+      setResponseMessage(errorMessage)
     } finally {
       setLoading(false)
     }
