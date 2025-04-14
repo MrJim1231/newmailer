@@ -66,3 +66,23 @@
   font-size: 16px;
   color: #28a745;
 }
+
+.passwordWrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.togglePassword {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  position: absolute;
+  right: 10px;
+}
+
+.wideInput {
+  width: 100%;
+}

@@ -5,12 +5,12 @@ import styles from '../styles/ConfigForm.module.css'
 
 function ConfigForm() {
   const [formData, setFormData] = useState({
+    account_name: '',
+    MAIL_USERNAME: '',
+    MAIL_PASSWORD: '',
     MAIL_HOST: 'smtp.gmail.com',
     MAIL_PORT: 587,
     MAIL_ENCRYPTION: 'STARTTLS',
-    MAIL_USERNAME: '',
-    MAIL_PASSWORD: '',
-    account_name: '',
   })
 
   const [responseMessage, setResponseMessage] = useState('')
@@ -34,6 +34,16 @@ function ConfigForm() {
       })
 
       setResponseMessage(response.data.message)
+
+      // Очистка формы после успешного сохранения
+      setFormData({
+        account_name: '',
+        MAIL_USERNAME: '',
+        MAIL_PASSWORD: '',
+        MAIL_HOST: 'smtp.gmail.com',
+        MAIL_PORT: 587,
+        MAIL_ENCRYPTION: 'STARTTLS',
+      })
     } catch (error) {
       console.error('Ошибка при сохранении данных:', error)
       setResponseMessage('Ошибка при сохранении данных')
@@ -50,18 +60,30 @@ function ConfigForm() {
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>MAIL_HOST</label>
-          <input type="text" name="MAIL_HOST" value={formData.MAIL_HOST} onChange={handleChange} readOnly required className={styles.input} />
-        </div>
-
-        <div className={styles.formGroup}>
           <label className={styles.label}>MAIL_USERNAME</label>
           <input type="email" name="MAIL_USERNAME" value={formData.MAIL_USERNAME} onChange={handleChange} placeholder="MAIL_USERNAME" required className={styles.input} />
         </div>
 
         <div className={styles.formGroup}>
           <label className={styles.label}>MAIL_PASSWORD</label>
-          <input type="password" name="MAIL_PASSWORD" value={formData.MAIL_PASSWORD} onChange={handleChange} placeholder="MAIL_PASSWORD" required className={styles.input} />
+          <div className={styles.passwordWrapper}>
+            <input type="password" name="MAIL_PASSWORD" value={formData.MAIL_PASSWORD} onChange={handleChange} placeholder="MAIL_PASSWORD" required className={`${styles.input} ${styles.wideInput}`} />
+            <button
+              type="button"
+              className={styles.togglePassword}
+              onClick={() => {
+                const input = document.querySelector('[name="MAIL_PASSWORD"]')
+                input.type = input.type === 'password' ? 'text' : 'password'
+              }}
+            >
+              Показать
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>MAIL_HOST</label>
+          <input type="text" name="MAIL_HOST" value={formData.MAIL_HOST} onChange={handleChange} readOnly required className={styles.input} />
         </div>
 
         <div className={styles.formGroup}>
