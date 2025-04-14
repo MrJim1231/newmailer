@@ -42,3 +42,16 @@ user_id INT,
 FOREIGN KEY (account_id) REFERENCES email_config(id) ON DELETE CASCADE,
 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE email_history (
+id INT AUTO_INCREMENT PRIMARY KEY,
+account_id INT NOT NULL,
+recipient_email VARCHAR(255) NOT NULL,
+subject VARCHAR(255) NOT NULL,
+message TEXT NOT NULL,
+attachment_path TEXT,
+sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+user_id INT NOT NULL, -- обязательное поле user_id
+FOREIGN KEY (account_id) REFERENCES email_config(id),
+FOREIGN KEY (user_id) REFERENCES users(id) -- если есть таблица users
+);

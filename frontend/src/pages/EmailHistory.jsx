@@ -29,6 +29,7 @@ function EmailHistory() {
       })
       .catch((err) => {
         console.error('Ошибка при загрузке истории:', err)
+        setMessage('Не удалось загрузить историю. Попробуйте позже.')
         setLoading(false)
       })
   }
@@ -54,7 +55,13 @@ function EmailHistory() {
       })
       .catch((err) => {
         console.error('Ошибка при очистке:', err)
+        setMessage('Не удалось очистить историю. Попробуйте позже.')
       })
+  }
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    return date.toLocaleString() // Возвращает строку с датой и временем
   }
 
   return (
@@ -90,7 +97,7 @@ function EmailHistory() {
                 <td>{item.subject}</td>
                 <td>{item.message}</td>
                 <td>{item.recipient_email}</td>
-                <td>{item.sent_at}</td>
+                <td>{formatDate(item.sent_at)}</td>
                 <td>
                   {item.attachment_path
                     ? item.attachment_path.split(',').map((path, index) => (

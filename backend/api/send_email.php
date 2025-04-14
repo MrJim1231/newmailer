@@ -35,6 +35,7 @@ if ($result->num_rows === 0) {
 }
 
 $config = $result->fetch_assoc();
+$user_id = $config['user_id']; // Получаем user_id из конфигурации
 $stmt->close();
 
 // Подключаем Composer autoloader для PHPMailer
@@ -99,10 +100,10 @@ try {
     $attachmentsString = implode(',', $filePathsToSave);
 
     // Сохраняем историю отправки в базу
-    $insertSql = "INSERT INTO email_history (account_id, recipient_email, subject, message, attachment_path)
-                  VALUES (?, ?, ?, ?, ?)";
+    $insertSql = "INSERT INTO email_history (account_id, recipient_email, subject, message, attachment_path, user_id)
+                  VALUES (?, ?, ?, ?, ?, ?)";
     $insertStmt = $conn->prepare($insertSql);
-    $insertStmt->bind_param('issss', $account_id, $email, $subject, $message, $attachmentsString);
+    $insertStmt->bind_param('issssi', $account_id, $email, $subject, $message, $attachmentsString, $user_id);
     $insertStmt->execute();
     $insertStmt->close();
 
@@ -110,4 +111,5 @@ try {
 } catch (Exception $e) {
     echo json_encode(['message' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo]); // Ошибка при отправке письма
 }
+
 ?>

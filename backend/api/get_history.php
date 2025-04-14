@@ -57,9 +57,24 @@ $sql = "SELECT h.id, h.recipient_email, h.subject, h.message, h.sent_at,
         ORDER BY h.sent_at DESC";
 
 $stmt = $conn->prepare($sql);
+
+// Проверка на ошибки при подготовке запроса
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Ошибка подготовки запроса']);
+    exit();
+}
+
 $stmt->bind_param('i', $user_id); // Привязываем user_id
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Проверка на ошибки при выполнении запроса
+if (!$result) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Ошибка выполнения запроса']);
+    exit();
+}
 
 $history = [];
 
