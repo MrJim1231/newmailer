@@ -15,30 +15,37 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
 
+    if (!email.trim() || !password.trim()) {
+      setMessage('Пожалуйста, заполните все поля')
+      return
+    }
+
     try {
       const response = await axios.post('http://localhost/newmailer/backend/api/login.php', {
         email,
         password,
       })
 
-      const { token, user, message } = response.data
+      const data = response.data
+
+      if (data.success === false) {
+        setMessage(data.error || 'Неверные данные для входа')
+        return
+      }
+
+      const { token, user, message } = data
 
       if (user.role !== 'admin') {
-        // Проверка роли пользователя
         setMessage('Доступ только для администратора')
         return
       }
 
       login(user, token)
       setMessage(message)
-      // console.log('Успешный вход:', response.data)
       navigate('/')
     } catch (error) {
-      if (error.response) {
-        setMessage(error.response.data.error)
-      } else {
-        setMessage('Ошибка соединения с сервером')
-      }
+      console.error('Ошибка входа:', error)
+      setMessage('Ошибка соединения с сервером')
     }
   }
 

@@ -25,8 +25,8 @@ $jwt_lifetime = 3600; // 1 час
 
 // Только POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(["error" => "Метод не поддерживается"]);
+    http_response_code(200);
+    echo json_encode(["success" => false, "error" => "Метод не поддерживается"]);
     exit;
 }
 
@@ -37,17 +37,15 @@ $email = $data['email'] ?? '';
 $password = $data['password'] ?? '';
 
 if (empty($email) || empty($password)) {
-    http_response_code(400);
-    echo json_encode(["error" => "Заполните все поля"]);
+    echo json_encode(["success" => false, "error" => "Заполните все поля"]);
     exit;
 }
 
-// Экранируем email
-$email = $conn->real_escape_string($email);
-
-// Проверяем наличие пользователя
-$sql = "SELECT * FROM users WHERE email = '$email'";
-$result = $conn->query($sql);
+// Подготовленный запрос
+$stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
@@ -80,13 +78,12 @@ if ($result->num_rows === 1) {
             ]
         ]);
     } else {
-        http_response_code(401);
-        echo json_encode(["error" => "Неверный пароль"]);
+        echo json_encode(["success" => false, "error" => "Неверный пароль"]);
     }
 } else {
-    http_response_code(404);
-    echo json_encode(["error" => "Пользователь не найден"]);
+    echo json_encode(["success" => false, "error" => "Пользователь не найден"]);
 }
 
+$stmt->close();
 $conn->close();
 ?>
