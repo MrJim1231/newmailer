@@ -15,12 +15,6 @@ function Navbar() {
         </Link>
       </div>
       <ul>
-        <li>
-          <Link to="/" className={styles.navLink}>
-            Главная
-          </Link>
-        </li>
-
         {user ? (
           <>
             <li>

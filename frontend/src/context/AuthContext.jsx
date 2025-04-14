@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token')
     setUser(null)
     setToken(null)
-    navigate('/login')
+    navigate('/auth/login')
   }
 
   return <AuthContext.Provider value={{ user, token, login, logout, loading }}>{children}</AuthContext.Provider>
