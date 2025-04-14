@@ -23,6 +23,12 @@ const Login = () => {
 
       const { token, user, message } = response.data
 
+      if (user.role !== 'admin') {
+        // Проверка роли пользователя
+        setMessage('Доступ только для администратора')
+        return
+      }
+
       login(user, token)
       setMessage(message)
       console.log('Успешный вход:', response.data)
