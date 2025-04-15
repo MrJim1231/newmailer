@@ -1,0 +1,25 @@
+.container {
+  padding: 32px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  color: #4b5563;
+  margin-bottom: 24px;
+  text-align: center; /* центрирование текста */
+}
+
+.section {
+  margin-top: 32px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}

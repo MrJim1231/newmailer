@@ -132,6 +132,22 @@ const AdminUsersList = () => {
 
   return (
     <div className={styles.container}>
+      <h3 className={styles.subtitle}>Добавить нового пользователя</h3>
+      {addStatus && <p className={styles.status}>{addStatus}</p>}
+
+      <div className={styles.addForm}>
+        <input type="email" value={newUser.email} onChange={(e) => handleNewUserChange('email', e.target.value)} placeholder="Email" className={styles.input} />
+        <input type="password" value={newUser.password} onChange={(e) => handleNewUserChange('password', e.target.value)} placeholder="Пароль" className={styles.input} />
+        <select value={newUser.role} onChange={(e) => handleNewUserChange('role', e.target.value)} className={styles.select}>
+          <option value="user">user</option>
+          <option value="admin">admin</option>
+          <option value="superadmin">superadmin</option>
+        </select>
+        <button onClick={handleAddUser} className={styles.button}>
+          Добавить пользователя
+        </button>
+      </div>
+
       <h2 className={styles.title}>Список пользователей</h2>
 
       {updateStatus && <p className={styles.status}>{updateStatus}</p>}
@@ -185,22 +201,6 @@ const AdminUsersList = () => {
           ))}
         </tbody>
       </table>
-
-      <h3 className={styles.subtitle}>Добавить нового пользователя</h3>
-      {addStatus && <p className={styles.status}>{addStatus}</p>}
-
-      <div className={styles.addForm}>
-        <input type="email" value={newUser.email} onChange={(e) => handleNewUserChange('email', e.target.value)} placeholder="Email" className={styles.input} />
-        <input type="password" value={newUser.password} onChange={(e) => handleNewUserChange('password', e.target.value)} placeholder="Пароль" className={styles.input} />
-        <select value={newUser.role} onChange={(e) => handleNewUserChange('role', e.target.value)} className={styles.select}>
-          <option value="user">user</option>
-          <option value="admin">admin</option>
-          <option value="superadmin">superadmin</option>
-        </select>
-        <button onClick={handleAddUser} className={styles.button}>
-          Добавить пользователя
-        </button>
-      </div>
     </div>
   )
 }

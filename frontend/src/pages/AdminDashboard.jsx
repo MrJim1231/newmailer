@@ -1,15 +1,15 @@
 import React from 'react'
-import UsersList from './AdminUsersList' // укажи правильный путь, если папка отличается
+import UsersList from './AdminUsersList' // измени путь при необходимости
+import styles from '../styles/AdminDashboard.module.css' // путь к CSS-модулю
 
 const AdminDashboard = () => {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Панель управления (SuperAdmin)</h1>
-      <p className="text-gray-600 mb-6">Добро пожаловать в административную панель. Здесь можно управлять системой.</p>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Панель управления (SuperAdmin)</h1>
+      <p className={styles.subtitle}>Добро пожаловать в административную панель. Здесь можно управлять системой.</p>
 
-      {/* Блок со списком пользователей */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Пользователи</h2>
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Пользователи</h2>
         <UsersList />
       </div>
     </div>
