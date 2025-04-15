@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext' // ✅ Подключаем контекст
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const { login } = useAuth() // ✅ Используем login из AuthContext
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -23,9 +25,8 @@ const AdminLogin = () => {
       const data = await response.json()
 
       if (data.success) {
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
-        navigate('/admin/dashboard') // или куда тебе нужно
+        login(data.user, data.token) // ✅ сохраняем в контекст + localStorage
+        navigate('/admin/dashboard')
       } else {
         setError(data.error)
       }
