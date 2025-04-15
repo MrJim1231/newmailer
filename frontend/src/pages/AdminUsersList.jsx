@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import styles from '../styles/AdminUsersList.module.css'
 
 const AdminUsersList = () => {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [updateStatus, setUpdateStatus] = useState('')
-  const [userEdits, setUserEdits] = useState({}) // <--- сюда изменения по id
+  const [userEdits, setUserEdits] = useState({})
 
   useEffect(() => {
     fetch('http://localhost/newmailer/backend/api/admin_get_users.php')
@@ -13,7 +14,6 @@ const AdminUsersList = () => {
       .then((data) => {
         if (data.success) {
           setUsers(data.users)
-          // заполняем userEdits начальными данными
           const initialEdits = {}
           data.users.forEach((user) => {
             initialEdits[user.id] = { role: user.role, password: '' }
@@ -64,13 +64,14 @@ const AdminUsersList = () => {
   }
 
   if (loading) return <p>Загрузка пользователей...</p>
-  if (error) return <p style={{ color: 'red' }}>{error}</p>
+  if (error) return <p className={styles.error}>{error}</p>
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Список пользователей</h2>
-      {updateStatus && <p className="mb-4 text-blue-600">{updateStatus}</p>}
-      <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Список пользователей</h2>
+      {updateStatus && <p className={styles.status}>{updateStatus}</p>}
+
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>ID</th>
@@ -89,17 +90,23 @@ const AdminUsersList = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>
-                <select value={userEdits[user.id]?.role || 'user'} onChange={(e) => handleEditChange(user.id, 'role', e.target.value)}>
+                <select value={userEdits[user.id]?.role || 'user'} onChange={(e) => handleEditChange(user.id, 'role', e.target.value)} className={styles.select}>
                   <option value="user">user</option>
                   <option value="admin">admin</option>
                   <option value="superadmin">superadmin</option>
                 </select>
               </td>
               <td>
-                <input type="text" value={userEdits[user.id]?.password || ''} placeholder="Новый пароль" onChange={(e) => handleEditChange(user.id, 'password', e.target.value)} />
+                <input
+                  type="text"
+                  value={userEdits[user.id]?.password || ''}
+                  placeholder="Новый пароль"
+                  onChange={(e) => handleEditChange(user.id, 'password', e.target.value)}
+                  className={styles.input}
+                />
               </td>
               <td>
-                <button onClick={() => handleUpdate(user.id)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                <button onClick={() => handleUpdate(user.id)} className={styles.button}>
                   Сохранить
                 </button>
               </td>
