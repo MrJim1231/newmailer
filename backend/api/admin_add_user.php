@@ -1,0 +1,63 @@
+<?php
+// Заголовки CORS
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json; charset=UTF-8");
+
+// Preflight-запрос
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Только POST-запрос
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(["success" => false, "error" => "Метод не поддерживается"]);
+    exit;
+}
+
+// Подключение к БД
+require_once __DIR__ . '/../includes/db.php';
+
+// Получаем данные из тела запроса
+$data = json_decode(file_get_contents("php://input"), true);
+
+$email = trim($data['email'] ?? '');
+$password = $data['password'] ?? '';
+$role = $data['role'] ?? 'user'; // по умолчанию роль - user
+
+// Проверка полей
+if (empty($email) || empty($password)) {
+    echo json_encode(["success" => false, "error" => "Заполните все поля"]);
+    exit;
+}
+
+// Проверка на существование пользователя с таким email
+$checkStmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+$checkStmt->bind_param("s", $email);
+$checkStmt->execute();
+$checkResult = $checkStmt->get_result();
+
+if ($checkResult->num_rows > 0) {
+    echo json_encode(["success" => false, "error" => "Пользователь с таким email уже существует"]);
+    $checkStmt->close();
+    exit;
+}
+$checkStmt->close();
+
+// Хешируем пароль
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+// Вставка нового пользователя
+$insertStmt = $conn->prepare("INSERT INTO users (email, password, role) VALUES (?, ?, ?)");
+$insertStmt->bind_param("sss", $email, $hashedPassword, $role);
+
+if ($insertStmt->execute()) {
+    echo json_encode(["success" => true, "message" => "Пользователь успешно добавлен"]);
+} else {
+    echo json_encode(["success" => false, "error" => "Ошибка при добавлении пользователя: " . $conn->error]);
+}
+
+$insertStmt->close();
+$conn->close();
