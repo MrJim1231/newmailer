@@ -20,18 +20,20 @@ role ENUM('admin', 'user') NOT NULL DEFAULT 'user'
 
 ALTER TABLE users MODIFY role ENUM('superadmin', 'admin', 'user') NOT NULL DEFAULT 'user';
 
+-- Таблица email_config
 CREATE TABLE email_config (
 id INT AUTO_INCREMENT PRIMARY KEY,
-MAIL_HOST VARCHAR(255),
-MAIL_USERNAME VARCHAR(255),
-MAIL_PASSWORD VARCHAR(255),
-MAIL_PORT INT,
-MAIL_ENCRYPTION VARCHAR(50),
-account_name VARCHAR(255),
-user_id INT,
+MAIL_HOST VARCHAR(255) NOT NULL,
+MAIL_USERNAME VARCHAR(255) NOT NULL,
+MAIL_PASSWORD VARCHAR(255) NOT NULL,
+MAIL_PORT INT NOT NULL,
+MAIL_ENCRYPTION VARCHAR(50) NOT NULL,
+account_name VARCHAR(255) NOT NULL,
+user_id INT NOT NULL,
 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Таблица email_history
 CREATE TABLE email_history (
 id INT AUTO_INCREMENT PRIMARY KEY,
 account_id INT NOT NULL,
@@ -40,7 +42,7 @@ subject VARCHAR(255) NOT NULL,
 message TEXT NOT NULL,
 attachment_path TEXT,
 sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-user_id INT NOT NULL, -- обязательное поле user_id
-FOREIGN KEY (account_id) REFERENCES email_config(id),
-FOREIGN KEY (user_id) REFERENCES users(id) -- если есть таблица users
+user_id INT NOT NULL,
+FOREIGN KEY (account_id) REFERENCES email_config(id) ON DELETE CASCADE,
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

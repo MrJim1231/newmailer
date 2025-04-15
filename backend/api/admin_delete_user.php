@@ -56,3 +56,4 @@ if ($deleteStmt->execute()) {
 
 $deleteStmt->close();
 $conn->close();
+?>
