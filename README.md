@@ -15,10 +15,8 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 email VARCHAR(255) NOT NULL UNIQUE,
 password VARCHAR(255) NOT NULL,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-role ENUM('admin', 'user') NOT NULL DEFAULT 'user'
+role ENUM('superadmin', 'admin', 'user') NOT NULL DEFAULT 'user'
 );
-
-ALTER TABLE users MODIFY role ENUM('superadmin', 'admin', 'user') NOT NULL DEFAULT 'user';
 
 -- Таблица email_config
 CREATE TABLE email_config (
