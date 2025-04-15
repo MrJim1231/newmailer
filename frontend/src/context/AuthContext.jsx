@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       setToken(storedToken)
     }
 
-    setLoading(false) // ✅ Обязательно сбрасываем loading
+    setLoading(false) // ✅ загрузка завершена
   }, [])
 
   const login = (userData, userToken) => {
