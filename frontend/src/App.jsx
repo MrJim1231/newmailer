@@ -10,9 +10,12 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
-import Home from './pages/Home' // ✅ Добавь компонент Home
-import { AuthProvider, useAuth } from './context/AuthContext' // Импортируем AuthProvider и useAuth
-import AuthPage from './pages/AuthPage' // 👈 компонент, который внутри переключает формы
+import Home from './pages/Home' // ✅ компонент домашней страницы
+import { AuthProvider, useAuth } from './context/AuthContext'
+import AuthPage from './pages/AuthPage' // 👈 компонент авторизации
+import AdminLogin from './pages/AdminLogin' // 🔐 вход в админку
+import AdminDashboard from './pages/AdminDashboard' // 🔐 панель супер-админа
+import RequireSuperAdmin from './components/RequireSuperAdmin' // 🔒 защита маршрута
 import styles from './App.module.css'
 
 function App() {
@@ -23,7 +26,10 @@ function App() {
           <Navbar />
           <div className={styles.appContainer}>
             <Routes>
+              {/* Главная логика редиректа */}
               <Route path="/" element={<RedirectToAppropriatePage />} />
+
+              {/* Пользовательские страницы */}
               <Route path="/email-form" element={<EmailForm />} />
               <Route path="/config-form" element={<ConfigForm />} />
               <Route path="/delete-account" element={<DeleteAccount />} />
@@ -32,6 +38,18 @@ function App() {
               <Route path="/auth/login" element={<AuthPage mode="login" />} />
               <Route path="/auth/register" element={<AuthPage mode="register" />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/home" element={<Home />} />
+
+              {/* Админская зона */}
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <RequireSuperAdmin>
+                    <AdminDashboard />
+                  </RequireSuperAdmin>
+                }
+              />
             </Routes>
           </div>
           <Footer />
@@ -41,14 +59,13 @@ function App() {
   )
 }
 
+// 🔁 Перенаправление с "/" в зависимости от авторизации
 function RedirectToAppropriatePage() {
   const { user } = useAuth()
 
   if (user) {
-    // Если пользователь залогинен, перенаправляем на /email-form
     return <Navigate to="/email-form" />
   } else {
-    // Если пользователь не залогинен, перенаправляем на /auth/login
     return <Navigate to="/auth/login" />
   }
 }

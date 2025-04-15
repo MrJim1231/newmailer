@@ -18,6 +18,8 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 role ENUM('admin', 'user') NOT NULL DEFAULT 'user'
 );
 
+ALTER TABLE users MODIFY role ENUM('superadmin', 'admin', 'user') NOT NULL DEFAULT 'user';
+
 CREATE TABLE email_config (
 id INT AUTO_INCREMENT PRIMARY KEY,
 MAIL_HOST VARCHAR(255),
