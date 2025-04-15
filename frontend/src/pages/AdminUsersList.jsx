@@ -171,12 +171,14 @@ const AdminUsersList = () => {
                 />
               </td>
               <td>
-                <button onClick={() => handleUpdate(user.id)} className={styles.button}>
-                  Сохранить
-                </button>
-                <button onClick={() => handleDelete(user.id)} className={styles.deleteButton}>
-                  Удалить
-                </button>
+                <div className={styles.buttonGroup}>
+                  <button onClick={() => handleUpdate(user.id)} className={styles.button}>
+                    Сохранить
+                  </button>
+                  <button onClick={() => handleDelete(user.id)} className={styles.deleteButton}>
+                    Удалить
+                  </button>
+                </div>
               </td>
               <td>{user.created_at}</td>
             </tr>
