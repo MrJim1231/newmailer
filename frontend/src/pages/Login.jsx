@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { API_URL } from '../api/config'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import styles from '../styles/AuthPage.module.css'
@@ -21,7 +22,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost/newmailer/backend/api/login.php', {
+      const response = await axios.post(`${API_URL}login.php`, {
         email,
         password,
       })

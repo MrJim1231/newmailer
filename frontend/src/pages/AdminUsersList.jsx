@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { API_URL } from '../api/config'
 import styles from '../styles/AdminUsersList.module.css'
 
 const AdminUsersList = () => {
@@ -16,7 +17,7 @@ const AdminUsersList = () => {
 
   const fetchUsers = () => {
     setLoading(true)
-    fetch('http://localhost/newmailer/backend/api/admin_get_users.php')
+    fetch(`${API_URL}admin_get_users.php`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -51,7 +52,7 @@ const AdminUsersList = () => {
     const { role, password } = userEdits[id]
     setUpdateStatus('')
 
-    fetch('http://localhost/newmailer/backend/api/admin_update_user.php', {
+    fetch(`${API_URL}admin_update_user.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, role, password }),
@@ -73,7 +74,7 @@ const AdminUsersList = () => {
   const handleDelete = (id) => {
     if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return
 
-    fetch('http://localhost/newmailer/backend/api/admin_delete_user.php', {
+    fetch(`${API_URL}admin_delete_user.php`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id }),
@@ -107,7 +108,7 @@ const AdminUsersList = () => {
       return
     }
 
-    fetch('http://localhost/newmailer/backend/api/admin_add_user.php', {
+    fetch(`${API_URL}admin_add_user.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, role }),

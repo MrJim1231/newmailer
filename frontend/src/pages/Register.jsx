@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { API_URL } from '../api/config'
 import styles from '../styles/AuthPage.module.css'
 
 const Register = () => {
@@ -14,7 +15,7 @@ const Register = () => {
     setError(null)
 
     try {
-      const response = await axios.post('http://localhost/newmailer/backend/api/register.php', {
+      const response = await axios.post(`${API_URL}register.php`, {
         email,
         password,
       })

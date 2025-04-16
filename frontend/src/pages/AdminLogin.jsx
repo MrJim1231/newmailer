@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { API_URL } from '../api/config'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import styles from '../styles/AdminLogin.module.css'
@@ -15,7 +16,7 @@ const AdminLogin = () => {
     setError('')
 
     try {
-      const response = await fetch('http://localhost/newmailer/backend/api/admin_login.php', {
+      const response = await fetch(`${API_URL}admin_login.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
