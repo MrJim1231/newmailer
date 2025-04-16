@@ -59,3 +59,43 @@
   color: #0c51b8;
   text-decoration: underline;
 }
+
+/* Адаптация под мобильные устройства */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .clearButton {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .table {
+    font-size: 14px;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .table th,
+  .table td {
+    padding: 6px;
+  }
+
+  .loading,
+  .empty {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .fileLink {
+    font-size: 14px;
+    word-break: break-all;
+  }
+}

@@ -38,17 +38,12 @@ function Navbar() {
             <>
               <li>
                 <NavLink to="/email-form" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
-                  Форма отправки письма
+                  Отправить письмо
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/config-form" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
-                  Добавить SMTP Конфигурацию
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/history" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
-                  История писем
+                  Добавить аккаунт
                 </NavLink>
               </li>
               <li>
@@ -57,6 +52,11 @@ function Navbar() {
                 </NavLink>
               </li>
               <li>
+                <NavLink to="/history" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
+                  История писем
+                </NavLink>
+              </li>
+              {/* <li>
                 <NavLink to="/profile" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
                   Профиль
                 </NavLink>
@@ -65,7 +65,7 @@ function Navbar() {
                 <NavLink to="/faq" className={({ isActive }) => (isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink)}>
                   FAQ
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <button onClick={logout} className={styles.navButton}>
                   Выйти
